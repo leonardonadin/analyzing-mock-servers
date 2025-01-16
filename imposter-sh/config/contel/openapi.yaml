@@ -1,0 +1,5439 @@
+openapi: 3.0.3
+info:
+  title: API CONTEL
+  description: >-
+    Aqui você encontrará toda a referência técnica que precisa para realizar uma
+    integração completa da Contel Telecom em suas aplicações.
+
+
+    A API CONTEL foi desenvolvida de acordo com os melhores padrões
+    [REST](https://en.wikipedia.org/wiki/Representational_state_transfer).
+
+
+    As operações são feitas por requisições aos endpoints, de acordo com os
+    verbos HTTP, com corpos de mensagem em
+    [JSON](https://www.json.org/json-en.html). As respostas podem ser
+    interpretadas através do código de status HTTP. Isso permite que quaisquer
+    aplicações consumam a API de forma simples e clara, independente da
+    linguagem utilizada.
+
+
+    **Vamos descomplicar a telefonia no Brasil?**
+
+
+    O endereço base de comunicação é
+    [api.conteltelecom.com.br](http://api.conteltelecom.com.br/), sempre com o
+    protocolo seguro **https**.
+
+
+    *Se você não possui seu token de acesso, solicite através do nosso suporte
+    técnico.*
+
+
+    Se você possui dúvidas ou está tendo problemas com a integração, o suporta
+    também irá lhe auxiliar.
+
+
+    Suporte técnico: [ti@conteltelecom.com.br](mailto:ti@conteltelecom.com.br)
+
+
+    SLA de resposta: 12 horas úteis.
+  version: 1.0.0
+  contact: {}
+servers:
+  - url: https://api.conteltelecom.com.br
+paths:
+  /auth/token:
+    post:
+      tags:
+        - Token
+      summary: Autenticação
+      description: >-
+        Se você for uma franquia, é necessário enviar, na requisição de geração
+        de token, a chave de acesso da Contel (**chave_acesso**) e a chave
+        exclusiva da sua franquia (**chave_acesso_franquia**).
+
+
+        Exemplo:
+
+
+        ``` json
+
+        {
+            "chave_acesso": "xxx",
+            "chave_acesso_franquia": "xxx"
+        }
+
+         ```
+
+        Se você for uma marca, deve ser enviado apenas a chave de acesso da sua
+        marca (**chave_acesso**). Ela é exclusiva.
+
+
+        Exemplo:
+
+
+        ``` json
+
+        {
+            "chave_acesso": "xxx"
+        }
+
+         ```
+
+        Agora, se você for um PDV (ponto de venda), deve enviar a chave de
+        acesso geral da sua marca e a chave de acesso exclusiva do seu PDV
+        (**chave_acesso_pdv**).
+
+
+        Exemplo:
+
+
+        ``` json
+
+        {
+            "chave_acesso": "xxx",
+            "chave_acesso_pdv": "xxx"
+        }
+
+         ```
+
+        Caso não tenha nenhuma das chaves, solicite através do nosso suporte
+        técnico:
+        [<b>ti@conteltelecom.com.br</b>](https://mailto:ti@conteltelecom.com.br)
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | chave_acesso | String | Token geral da Contel ou Token exclusivo da
+        marca / mvno |  |
+
+        | chave_acesso_franquia | String | Token exclusivo de cada franquia |  |
+
+        | chave_acesso_pdv | String | Token exclusivo de cada PDV |  |
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | retorno | Booleano | Sucesso do retorno do endpoint |
+
+        | mensaem | String | Mensagem com status ou descrição de erro |
+
+        | token | String | Token gerado |
+      operationId: autenticaO
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                chave_acesso:
+                  type: string
+                  example: chave_de_acesso
+                chave_acesso_franquia:
+                  type: string
+                  example: token_da_franquia
+            example:
+              chave_acesso: chave_de_acesso
+              chave_acesso_franquia: token_da_franquia
+      responses:
+        '200':
+          description: ''
+  /ddds:
+    get:
+      tags:
+        - Geral
+      summary: Listar DDDs
+      description: |-
+        DDDs do Brasil para validação de ativação.
+
+        Estrutura do conteúdo de resposta:
+
+        | **Atributo** | **Tipo** | **Descrição** |
+        | --- | --- | --- |
+        | ddd | Int | DDD |
+        | uf | String | Estado ao qual pertence o DDD |
+      operationId: listarDdds
+      responses:
+        '200':
+          description: 200 OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        ddd:
+                          type: number
+                          example: 11
+                        uf:
+                          type: string
+                          example: SP
+                    example:
+                      - ddd: 11
+                        uf: SP
+                      - ddd: 12
+                        uf: SP
+                      - ddd: 13
+                        uf: SP
+                      - ddd: 14
+                        uf: SP
+                      - ddd: 15
+                        uf: SP
+                      - ddd: 16
+                        uf: SP
+                      - ddd: 17
+                        uf: SP
+                      - ddd: 18
+                        uf: SP
+                      - ddd: 19
+                        uf: SP
+                      - ddd: 21
+                        uf: RJ
+                      - ddd: 22
+                        uf: RJ
+                      - ddd: 24
+                        uf: RJ
+                      - ddd: 27
+                        uf: ES
+                      - ddd: 28
+                        uf: ES
+                      - ddd: 31
+                        uf: MG
+                      - ddd: 32
+                        uf: MG
+                      - ddd: 33
+                        uf: MG
+                      - ddd: 34
+                        uf: MG
+                      - ddd: 35
+                        uf: MG
+                      - ddd: 37
+                        uf: MG
+                      - ddd: 38
+                        uf: MG
+                      - ddd: 41
+                        uf: PR
+                      - ddd: 42
+                        uf: PR
+                      - ddd: 43
+                        uf: PR
+                      - ddd: 44
+                        uf: PR
+                      - ddd: 45
+                        uf: PR
+                      - ddd: 46
+                        uf: PR
+                      - ddd: 47
+                        uf: SC
+                      - ddd: 48
+                        uf: SC
+                      - ddd: 49
+                        uf: SC
+                      - ddd: 51
+                        uf: RS
+                      - ddd: 53
+                        uf: RS
+                      - ddd: 54
+                        uf: RS
+                      - ddd: 55
+                        uf: RS
+                      - ddd: 61
+                        uf: GO
+                      - ddd: 62
+                        uf: GO
+                      - ddd: 64
+                        uf: GO
+                      - ddd: 63
+                        uf: TO
+                      - ddd: 65
+                        uf: MT
+                      - ddd: 66
+                        uf: MT
+                      - ddd: 67
+                        uf: MS
+                      - ddd: 68
+                        uf: AC
+                      - ddd: 69
+                        uf: RO
+                      - ddd: 71
+                        uf: BA
+                      - ddd: 73
+                        uf: BA
+                      - ddd: 74
+                        uf: BA
+                      - ddd: 75
+                        uf: BA
+                      - ddd: 77
+                        uf: BA
+                      - ddd: 79
+                        uf: SE
+                      - ddd: 81
+                        uf: PE
+                      - ddd: 87
+                        uf: PE
+                      - ddd: 82
+                        uf: AL
+                      - ddd: 83
+                        uf: PB
+                      - ddd: 84
+                        uf: RN
+                      - ddd: 85
+                        uf: CE
+                      - ddd: 88
+                        uf: CE
+                      - ddd: 86
+                        uf: PI
+                      - ddd: 89
+                        uf: PI
+                      - ddd: 91
+                        uf: PA
+                      - ddd: 93
+                        uf: PA
+                      - ddd: 94
+                        uf: PA
+                      - ddd: 95
+                        uf: RR
+                      - ddd: 96
+                        uf: AP
+                      - ddd: 92
+                        uf: AM
+                      - ddd: 97
+                        uf: AM
+                      - ddd: 98
+                        uf: MA
+                      - ddd: 99
+                        uf: MA
+              examples:
+                200 OK:
+                  value:
+                    data:
+                      - ddd: 11
+                        uf: SP
+                      - ddd: 12
+                        uf: SP
+                      - ddd: 13
+                        uf: SP
+                      - ddd: 14
+                        uf: SP
+                      - ddd: 15
+                        uf: SP
+                      - ddd: 16
+                        uf: SP
+                      - ddd: 17
+                        uf: SP
+                      - ddd: 18
+                        uf: SP
+                      - ddd: 19
+                        uf: SP
+                      - ddd: 21
+                        uf: RJ
+                      - ddd: 22
+                        uf: RJ
+                      - ddd: 24
+                        uf: RJ
+                      - ddd: 27
+                        uf: ES
+                      - ddd: 28
+                        uf: ES
+                      - ddd: 31
+                        uf: MG
+                      - ddd: 32
+                        uf: MG
+                      - ddd: 33
+                        uf: MG
+                      - ddd: 34
+                        uf: MG
+                      - ddd: 35
+                        uf: MG
+                      - ddd: 37
+                        uf: MG
+                      - ddd: 38
+                        uf: MG
+                      - ddd: 41
+                        uf: PR
+                      - ddd: 42
+                        uf: PR
+                      - ddd: 43
+                        uf: PR
+                      - ddd: 44
+                        uf: PR
+                      - ddd: 45
+                        uf: PR
+                      - ddd: 46
+                        uf: PR
+                      - ddd: 47
+                        uf: SC
+                      - ddd: 48
+                        uf: SC
+                      - ddd: 49
+                        uf: SC
+                      - ddd: 51
+                        uf: RS
+                      - ddd: 53
+                        uf: RS
+                      - ddd: 54
+                        uf: RS
+                      - ddd: 55
+                        uf: RS
+                      - ddd: 61
+                        uf: GO
+                      - ddd: 62
+                        uf: GO
+                      - ddd: 64
+                        uf: GO
+                      - ddd: 63
+                        uf: TO
+                      - ddd: 65
+                        uf: MT
+                      - ddd: 66
+                        uf: MT
+                      - ddd: 67
+                        uf: MS
+                      - ddd: 68
+                        uf: AC
+                      - ddd: 69
+                        uf: RO
+                      - ddd: 71
+                        uf: BA
+                      - ddd: 73
+                        uf: BA
+                      - ddd: 74
+                        uf: BA
+                      - ddd: 75
+                        uf: BA
+                      - ddd: 77
+                        uf: BA
+                      - ddd: 79
+                        uf: SE
+                      - ddd: 81
+                        uf: PE
+                      - ddd: 87
+                        uf: PE
+                      - ddd: 82
+                        uf: AL
+                      - ddd: 83
+                        uf: PB
+                      - ddd: 84
+                        uf: RN
+                      - ddd: 85
+                        uf: CE
+                      - ddd: 88
+                        uf: CE
+                      - ddd: 86
+                        uf: PI
+                      - ddd: 89
+                        uf: PI
+                      - ddd: 91
+                        uf: PA
+                      - ddd: 93
+                        uf: PA
+                      - ddd: 94
+                        uf: PA
+                      - ddd: 95
+                        uf: RR
+                      - ddd: 96
+                        uf: AP
+                      - ddd: 92
+                        uf: AM
+                      - ddd: 97
+                        uf: AM
+                      - ddd: 98
+                        uf: MA
+                      - ddd: 99
+                        uf: MA
+        '404':
+          description: 404 Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  erro:
+                    type: string
+                    example: Endpoint inexistente ou recurso não encontrato.
+              examples:
+                404 Not Found:
+                  value:
+                    erro: Endpoint inexistente ou recurso não encontrato.
+  /planos:
+    get:
+      tags:
+        - Geral
+      summary: Listar Planos
+      description: >-
+        Consulta de planos disponíveis.
+
+
+        Retorna várias informações para cada plano ativo disponível.
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | id | Int | ID do plano. Este é o id que deve ser utilizado nos demais
+        endpoints, como solicitação de recarga, ativação ou compra de chip |
+
+        | plano | String | Nome do plano |
+
+        | valor | Decimal | Valor de venda do plano |
+
+        | nome_plano | String | Nome de exibição do plano |
+
+        | ligacoes | String | Quantidade de minutos disponíveis no plano |
+
+        | sms | String | Quantidade de SMS do plano |
+
+        | detalhamento | String | Detalhamento dos GB do plano |
+
+        | descricao_detalhamento | String | Descrição do detalhamento dos GB do
+        plano |
+
+        | cor | String | Cor de identificação do plano para personalização |
+
+        | internet_padrao | String | Quantidade de internet padrão do plano, sem
+        bônus |
+      operationId: listarPlanos
+      responses:
+        '200':
+          description: Listar Planos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        cor:
+                          type: string
+                          example: '#00d66a'
+                        descricao_detalhamento:
+                          type: string
+                          example: 1 GB de recorrência
+                        detalhamento:
+                          type: string
+                          example: 6 GB + 1 GB
+                        id:
+                          type: number
+                          example: 99999
+                        internet_padrao:
+                          type: string
+                          example: 6 GB
+                        ligacoes:
+                          type: string
+                          example: ligações ilimitadas
+                        nome_plano:
+                          type: string
+                          example: 7 GB
+                        plano:
+                          type: string
+                          example: 7 GB
+                        sms:
+                          type: string
+                          example: 100 SMS
+                        valor:
+                          type: number
+                          example: 44.9
+                    example:
+                      - cor: '#00d66a'
+                        descricao_detalhamento: 1 GB de recorrência
+                        detalhamento: 6 GB + 1 GB
+                        id: 99999
+                        internet_padrao: 6 GB
+                        ligacoes: ligações ilimitadas
+                        nome_plano: 7 GB
+                        plano: 7 GB
+                        sms: 100 SMS
+                        valor: 44.9
+              examples:
+                Listar Planos:
+                  value:
+                    data:
+                      - cor: '#00d66a'
+                        descricao_detalhamento: 1 GB de recorrência
+                        detalhamento: 6 GB + 1 GB
+                        id: 99999
+                        internet_padrao: 6 GB
+                        ligacoes: ligações ilimitadas
+                        nome_plano: 7 GB
+                        plano: 7 GB
+                        sms: 100 SMS
+                        valor: 44.9
+  /planosCampanhas:
+    get:
+      tags:
+        - Geral
+      summary: Listar Planos Campanhas
+      description: >-
+        Retorna a listagem de planos disponíveis de campanhas, como por exemplo
+        o Pague 8 Leve 12.
+
+
+        Retorna várias informações para cada plano ativo disponível na campanha.
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | id | Int | ID do plano. Este é o id que deve ser utilizado nos demais
+        endpoints, como solicitação de recarga, ativação ou compra de chip |
+
+        | plano | String | Nome do plano |
+
+        | valor | Decimal | Valor de venda do plano |
+
+        | nome_plano | String | Nome de exibição do plano |
+
+        | ligacoes | String | Quantidade de minutos disponíveis no plano |
+
+        | sms | String | Quantidade de SMS do plano |
+
+        | detalhamento | String | Detalhamento dos GB do plano |
+
+        | descricao_detalhamento | String | Descrição do detalhamento dos GB do
+        plano |
+
+        | cor | String | Cor de identificação do plano para personalização |
+
+        | internet_padrao | String | Quantidade de internet padrão do plano, sem
+        bônus |
+      operationId: listarPlanosCampanhas
+      responses:
+        '200':
+          description: Listar Planos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        cor:
+                          type: string
+                          example: '#00d66a'
+                        descricao_detalhamento:
+                          type: string
+                          example: 1 GB de recorrência
+                        detalhamento:
+                          type: string
+                          example: 6 GB + 1 GB
+                        id:
+                          type: number
+                          example: 99999
+                        internet_padrao:
+                          type: string
+                          example: 6 GB
+                        ligacoes:
+                          type: string
+                          example: ligações ilimitadas
+                        nome_plano:
+                          type: string
+                          example: 7 GB
+                        plano:
+                          type: string
+                          example: 7 GB
+                        sms:
+                          type: string
+                          example: 100 SMS
+                        valor:
+                          type: number
+                          example: 44.9
+                    example:
+                      - cor: '#00d66a'
+                        descricao_detalhamento: 1 GB de recorrência
+                        detalhamento: 6 GB + 1 GB
+                        id: 99999
+                        internet_padrao: 6 GB
+                        ligacoes: ligações ilimitadas
+                        nome_plano: 7 GB
+                        plano: 7 GB
+                        sms: 100 SMS
+                        valor: 44.9
+              examples:
+                Listar Planos:
+                  value:
+                    data:
+                      - cor: '#00d66a'
+                        descricao_detalhamento: 1 GB de recorrência
+                        detalhamento: 6 GB + 1 GB
+                        id: 99999
+                        internet_padrao: 6 GB
+                        ligacoes: ligações ilimitadas
+                        nome_plano: 7 GB
+                        plano: 7 GB
+                        sms: 100 SMS
+                        valor: 44.9
+  /estados:
+    get:
+      tags:
+        - Geral
+      summary: Listar Estados
+      description: |-
+        Consulta dos estados brasileiros para posterior consulta de cidades.
+
+        Estrutura do conteúdo de resposta:
+
+        | **Atributo** | **Tipo** | **Descrição** |
+        | --- | --- | --- |
+        | estado | String | Nome do estado brasileir |
+        | uf | String | Sigla do estado |
+      operationId: listarEstados
+      responses:
+        '200':
+          description: Listar Estados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        estado:
+                          type: string
+                          example: Acre
+                        uf:
+                          type: string
+                          example: AC
+                    example:
+                      - estado: Acre
+                        uf: AC
+                      - estado: Alagoas
+                        uf: AL
+                      - estado: Amapá
+                        uf: AP
+                      - estado: Amazonas
+                        uf: AM
+                      - estado: Bahia
+                        uf: BA
+                      - estado: Ceará
+                        uf: CE
+                      - estado: Distrito Federal
+                        uf: DF
+                      - estado: Espírito Santo
+                        uf: ES
+                      - estado: Goiás
+                        uf: GO
+                      - estado: Maranhão
+                        uf: MA
+                      - estado: Mato Grosso
+                        uf: MT
+                      - estado: Mato Grosso do Sul
+                        uf: MS
+                      - estado: Minas Gerais
+                        uf: MG
+                      - estado: Pará
+                        uf: PA
+                      - estado: Paraíba
+                        uf: PB
+                      - estado: Paraná
+                        uf: PR
+                      - estado: Pernambuco
+                        uf: PE
+                      - estado: Piauí
+                        uf: PI
+                      - estado: Rio de Janeiro
+                        uf: RJ
+                      - estado: Rio Grande do Norte
+                        uf: RN
+                      - estado: Rio Grande do Sul
+                        uf: RS
+                      - estado: Rondônia
+                        uf: RO
+                      - estado: Roraima
+                        uf: RR
+                      - estado: Santa Catarina
+                        uf: SC
+                      - estado: São Paulo
+                        uf: SP
+                      - estado: Sergipe
+                        uf: SE
+                      - estado: Tocantins
+                        uf: TO
+              examples:
+                Listar Estados:
+                  value:
+                    data:
+                      - estado: Acre
+                        uf: AC
+                      - estado: Alagoas
+                        uf: AL
+                      - estado: Amapá
+                        uf: AP
+                      - estado: Amazonas
+                        uf: AM
+                      - estado: Bahia
+                        uf: BA
+                      - estado: Ceará
+                        uf: CE
+                      - estado: Distrito Federal
+                        uf: DF
+                      - estado: Espírito Santo
+                        uf: ES
+                      - estado: Goiás
+                        uf: GO
+                      - estado: Maranhão
+                        uf: MA
+                      - estado: Mato Grosso
+                        uf: MT
+                      - estado: Mato Grosso do Sul
+                        uf: MS
+                      - estado: Minas Gerais
+                        uf: MG
+                      - estado: Pará
+                        uf: PA
+                      - estado: Paraíba
+                        uf: PB
+                      - estado: Paraná
+                        uf: PR
+                      - estado: Pernambuco
+                        uf: PE
+                      - estado: Piauí
+                        uf: PI
+                      - estado: Rio de Janeiro
+                        uf: RJ
+                      - estado: Rio Grande do Norte
+                        uf: RN
+                      - estado: Rio Grande do Sul
+                        uf: RS
+                      - estado: Rondônia
+                        uf: RO
+                      - estado: Roraima
+                        uf: RR
+                      - estado: Santa Catarina
+                        uf: SC
+                      - estado: São Paulo
+                        uf: SP
+                      - estado: Sergipe
+                        uf: SE
+                      - estado: Tocantins
+                        uf: TO
+  /cidades/UF:
+    get:
+      tags:
+        - Geral
+      summary: Listar Cidades
+      description: >-
+        Consulta de cidades, por estado. O id da cidade é enviado na compra de
+        chip.
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | id | Int | ID da cidade |
+
+        | cidade | String | Nome da cidade |
+
+        | uf | String | Sigla do estado ao qual a cidade pertence |
+      operationId: listarCidades
+      responses:
+        '200':
+          description: Listar Cidades
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        cidade:
+                          type: string
+                          example: Aceguá
+                        id:
+                          type: number
+                          example: 7703
+                        uf:
+                          type: string
+                          example: RS
+                    example:
+                      - cidade: Aceguá
+                        id: 7703
+                        uf: RS
+                      - cidade: Água Santa
+                        id: 7704
+                        uf: RS
+                      - cidade: Agudo
+                        id: 7705
+                        uf: RS
+                      - cidade: Ajuricaba
+                        id: 7706
+                        uf: RS
+              examples:
+                Listar Cidades:
+                  value:
+                    data:
+                      - cidade: Aceguá
+                        id: 7703
+                        uf: RS
+                      - cidade: Água Santa
+                        id: 7704
+                        uf: RS
+                      - cidade: Agudo
+                        id: 7705
+                        uf: RS
+                      - cidade: Ajuricaba
+                        id: 7706
+                        uf: RS
+  /logistica:
+    get:
+      tags:
+        - Geral
+      summary: Logística
+      description: >-
+        Retorna os valores de logística, como custo do chip físico e valor do
+        frete.
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | valor_frete | String | Valor do frete, para envio do chip até o
+        endereço do cliente |
+
+        | valor_chip | String | Valor unitário de cada chip físico |
+      operationId: logStica
+      responses:
+        '200':
+          description: ''
+  /cliente/criar:
+    post:
+      tags:
+        - Cliente
+      summary: Criar
+      description: >-
+        Cadastro de novo cliente.
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | nome | String | Nome completo do cliente | \* |
+
+        | cpf | String | CPF do cliente, para cliente pessoa física. Enviar este
+        campo apenas se o cliente for PF. |  |
+
+        | cnpj | String | CNPJ do cliente para cliente pessoa jurídica. Enviar
+        este campo apenas se o cliente for PJ. |  |
+
+        | apelido | String | Apelido ou nome social do cliente |  |
+
+        | email | String | Endereço de e-mail para contato |  |
+
+        | telefone | String | Telefone alternativo de contato do cliente. Enviar
+        somente números (DDD + 9 dígitos.) |  |
+
+        | data_nascimento | String | Data de nascimento, no formato: YYYY-MM-DD
+        | \* |
+
+        | rua | String | Nome da rua | \* |
+
+        | numero | String | Número do endereço | \* |
+
+        | complemento | String | Complemento ou ponto de referência |  |
+
+        | bairro | String | Bairro | \* |
+
+        | cep | String | CEP | \* |
+
+        | id_cidade | Int | id da cidade, oriundo do endpoint de [Listar
+        cidades](https://docs.conteltelecom.com.br/#8e214d5b-34be-4608-98c4-7d1238e40cb4).
+        | \* |
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | retorno | Booleano | Retorno de sucesso do endpoint |
+
+        | mensagem | String | Mensagem de retorno da api, como motivo de erro
+        por exemplo |
+
+        | id | Int | ID de cadastro do cliente |
+
+        | nome | String | Nome cadastrado |
+
+        | apelido | String | Apelido cadastrado |
+
+        | cpf | String | CPF do cliente cadastrado |
+
+        | cnpj | String | CNPJ do cliente cadastrado |
+
+        | email | String | E-mail cadastrado |
+
+        | telefone | String | Telefone de contato cadastrado |
+
+        | rua | String | Rua cadastrada |
+
+        | numero | String | Número cadastrado |
+
+        | bairro | String | Bairro cadastrado |
+
+        | cep | String | CEP cadastrado |
+
+        | complemento | String | Complemento cadastrado |
+
+        | municipio | String | Cidade cadastrada |
+
+        | uf | String | Estado cadastrado |
+
+        | data_cadastro | String | Data e hora do cadastro do cliente |
+      operationId: criar
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                apelido:
+                  type: string
+                  example: Mãe dos Dragões
+                cpf:
+                  type: string
+                  example: '00000000000'
+                data_nascimento:
+                  type: string
+                  example: '1900-01-01'
+                email:
+                  type: string
+                  example: daenerys@email.com
+                endereco:
+                  type: object
+                  properties:
+                    bairro:
+                      type: string
+                      example: Bairro
+                    cep:
+                      type: string
+                      example: '00000000'
+                    complemento:
+                      type: string
+                      example: Apto 01
+                    id_cidade:
+                      type: number
+                      example: 8066
+                    numero:
+                      type: string
+                      example: '123'
+                    rua:
+                      type: string
+                      example: Rua Exemplo
+                nome:
+                  type: string
+                  example: Daenerys Targaryen
+                telefone:
+                  type: string
+                  example: '00000000000'
+            example:
+              apelido: Mãe dos Dragões
+              cpf: '00000000000'
+              data_nascimento: '1900-01-01'
+              email: daenerys@email.com
+              endereco:
+                bairro: Bairro
+                cep: '00000000'
+                complemento: Apto 01
+                id_cidade: 8066
+                numero: '123'
+                rua: Rua Exemplo
+              nome: Daenerys Targaryen
+              telefone: '00000000000'
+      responses:
+        '200':
+          description: Criar
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cliente:
+                    type: object
+                    properties:
+                      apelido:
+                        type: string
+                        example: Apelido ou nome social
+                      cnpj:
+                        type: string
+                        example: ''
+                      cpf:
+                        type: string
+                        example: '00000000000'
+                      data_cadastro:
+                        type: string
+                        example: '2022-01-01 13:21:12'
+                      email:
+                        type: string
+                        example: exemplo@email.com
+                      endereco:
+                        type: object
+                        properties:
+                          bairro:
+                            type: string
+                            example: Centro
+                          cep:
+                            type: string
+                            example: '00000000'
+                          complemento:
+                            nullable: true
+                            example: null
+                          municipio:
+                            type: string
+                            example: Cidade
+                          numero:
+                            type: string
+                            example: '123'
+                          rua:
+                            type: string
+                            example: Rua Exemplo
+                          uf:
+                            type: string
+                            example: UF
+                      id:
+                        type: number
+                        example: 99999
+                      nome:
+                        type: string
+                        example: Nome do Cliente
+                      telefone:
+                        type: string
+                        example: '11900000000'
+                  mensagem:
+                    type: string
+                    example: ''
+                  retorno:
+                    type: boolean
+                    example: true
+              examples:
+                Criar:
+                  value:
+                    cliente:
+                      apelido: Apelido ou nome social
+                      cnpj: ''
+                      cpf: '00000000000'
+                      data_cadastro: '2022-01-01 13:21:12'
+                      email: exemplo@email.com
+                      endereco:
+                        bairro: Centro
+                        cep: '00000000'
+                        complemento: null
+                        municipio: Cidade
+                        numero: '123'
+                        rua: Rua Exemplo
+                        uf: UF
+                      id: 99999
+                      nome: Nome do Cliente
+                      telefone: '11900000000'
+                    mensagem: ''
+                    retorno: true
+        '422':
+          description: Criar
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: object
+                    properties:
+                      cpf:
+                        type: array
+                        items:
+                          type: string
+                          example: Já existe uma conta utilizando este CPF.
+                        example:
+                          - Já existe uma conta utilizando este CPF.
+                  message:
+                    type: string
+                    example: The given data was invalid.
+              examples:
+                Criar:
+                  value:
+                    errors:
+                      cpf:
+                        - Já existe uma conta utilizando este CPF.
+                    message: The given data was invalid.
+  /cliente/atualizar:
+    put:
+      tags:
+        - Cliente
+      summary: Atualizar
+      description: >-
+        Atualização de cadastro de cliente.
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | cpf | String | CPF do cliente. Enviar este campo apenas se o cliente
+        for PF. | \* |
+
+        | cnpj | String | CNPJ do cliente. Enviar este campo apenas se o cliente
+        for PJ. |  |
+
+        | nome | String | Nome completo do cliente | \* |
+
+        | apelido | String | Apelido ou nome social do cliente |  |
+
+        | email | String | Endereço de e-mail para contato |  |
+
+        | telefone | String | Telefone alternativo de contato do cliente |  |
+
+        | data_nascimento | String | Data de nascimento, no formato: YYYY-MM-DD
+        |  |
+
+        | rua | String | Nome da rua | \* |
+
+        | numero | String | Número do endereço | \* |
+
+        | complemento | String | Complemento ou ponto de referência |  |
+
+        | bairro | String | Bairro | \* |
+
+        | cep | String | CEP | \* |
+
+        | id_cidade | Int | id da cidade, oriunda do endpoint de [Listar
+        cidades](https://docs.conteltelecom.com.br/#8e214d5b-34be-4608-98c4-7d1238e40cb4).
+        | \* |
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | retorno | Booleano | Retorno de sucesso do endpoint |
+
+        | mensagem | String | Mensagem de retorno da api, como descrição de erro
+        por exemplo |
+
+        | id | Int | ID do cliente |
+
+        | cpf | String | CPF do cliente |
+
+        | cnpj | String | CNPJ do cliente |
+
+        | nome | String | Nome completo do cliente |
+
+        | apelido | String | Apelido cadastrado |
+
+        | email | String | Endereço de e-mail para contato |
+
+        | telefone | String | Telefone alternativo de contato do cliente |
+
+        | data_nascimento | String | Data de nascimento do cliente, para cliente
+        PF |
+
+        | rua | String | Nome da rua |
+
+        | numero | String | Número do endereço |
+
+        | complemento | String | Complemento ou ponto de referência |
+
+        | bairro | String | Bairro |
+
+        | cep | String | CEP |
+
+        | municipio | String | Nome da cidade |
+
+        | uf | String | Estado |
+      operationId: atualizar
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                apelido:
+                  type: string
+                  example: Mãe dos dragões
+                cpf:
+                  type: string
+                  example: '00000000000'
+                data_nascimento:
+                  type: string
+                  example: '1900-01-01'
+                email:
+                  type: string
+                  example: daenerys@email.com
+                endereco:
+                  type: object
+                  properties:
+                    bairro:
+                      type: string
+                      example: Bairro
+                    cep:
+                      type: string
+                      example: '00000000'
+                    complemento:
+                      type: string
+                      example: ''
+                    id_cidade:
+                      type: number
+                      example: 8066
+                    numero:
+                      type: string
+                      example: '123'
+                    rua:
+                      type: string
+                      example: Rua Exemplo
+                nome:
+                  type: string
+                  example: Daenerys Targaryen
+                telefone:
+                  type: string
+                  example: '00000000000'
+            example:
+              apelido: Mãe dos dragões
+              cpf: '00000000000'
+              data_nascimento: '1900-01-01'
+              email: daenerys@email.com
+              endereco:
+                bairro: Bairro
+                cep: '00000000'
+                complemento: ''
+                id_cidade: 8066
+                numero: '123'
+                rua: Rua Exemplo
+              nome: Daenerys Targaryen
+              telefone: '00000000000'
+      responses:
+        '200':
+          description: Atualizar
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cliente:
+                    type: object
+                    properties:
+                      apelido:
+                        type: string
+                        example: ''
+                      cnpj:
+                        type: string
+                        example: ''
+                      cpf:
+                        type: string
+                        example: '00000000000'
+                      data_cadastro:
+                        type: string
+                        example: '2022-01-01 00:00:00'
+                      email:
+                        type: string
+                        example: fulano@email.com
+                      endereco:
+                        type: object
+                        properties:
+                          bairro:
+                            type: string
+                            example: Bairro
+                          cep:
+                            type: string
+                            example: '000000000'
+                          complemento:
+                            type: string
+                            example: ''
+                          municipio:
+                            type: string
+                            example: São Paulo
+                          numero:
+                            type: string
+                            example: '123'
+                          rua:
+                            type: string
+                            example: Rua Exemplo
+                          uf:
+                            type: string
+                            example: SP
+                      id:
+                        type: number
+                        example: 99999
+                      nome:
+                        type: string
+                        example: Fulano da Silva
+                      telefone:
+                        type: string
+                        example: '51999999999'
+                  mensagem:
+                    type: string
+                    example: ''
+                  retorno:
+                    type: boolean
+                    example: true
+              examples:
+                Atualizar:
+                  value:
+                    cliente:
+                      apelido: ''
+                      cnpj: ''
+                      cpf: '00000000000'
+                      data_cadastro: '2022-01-01 00:00:00'
+                      email: fulano@email.com
+                      endereco:
+                        bairro: Bairro
+                        cep: '000000000'
+                        complemento: ''
+                        municipio: São Paulo
+                        numero: '123'
+                        rua: Rua Exemplo
+                        uf: SP
+                      id: 99999
+                      nome: Fulano da Silva
+                      telefone: '51999999999'
+                    mensagem: ''
+                    retorno: true
+        '422':
+          description: Atualizar
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: object
+                    properties:
+                      cpf:
+                        type: array
+                        items:
+                          type: string
+                          example: O campo cpf selecionado é inválido.
+                        example:
+                          - O campo cpf selecionado é inválido.
+                  message:
+                    type: string
+                    example: The given data was invalid.
+              examples:
+                Atualizar:
+                  value:
+                    errors:
+                      cpf:
+                        - O campo cpf selecionado é inválido.
+                    message: The given data was invalid.
+  /cliente/buscar:
+    get:
+      tags:
+        - Cliente
+      summary: Consultar
+      description: >-
+        Consulta de dados cadastrais de cliente. Também útil para verificar se
+        um cliente já existe na base.
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | documento | String | CPF ou CNPJ do cliente | \* |
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | retorno | Booleano | Retorno de sucesso do endpoint |
+
+        | mensagem | String | Mensagem de retorno da api, como mensagem de erro
+        por exemplo |
+
+        | id | Int | Código único identificador do cliente |
+
+        | nome | String | Nome completo |
+
+        | cpf | String | CPF |
+
+        | cnpj | String | CNPJ |
+
+        | nascimento | String | Data de nascimento |
+
+        | rua | String | Rua |
+
+        | numero | String | Número |
+
+        | bairro | String | Bairro |
+
+        | cep | String | CEP |
+
+        | complemento | String | Complemento |
+
+        | municipio | String | Cidade |
+
+        | uf | String | Estado |
+
+        | telefone | String | Telefone alternativo de contato |
+
+        | email | String | E-mail de contato |
+
+        | apelido | String | Apelido ou nome social do cliente |
+      operationId: consultar
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                documento:
+                  type: string
+                  example: cpf_ou_cnpj
+            example:
+              documento: cpf_ou_cnpj
+      responses:
+        '200':
+          description: Consultar
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cliente:
+                    type: array
+                    items: {}
+                    example: []
+                  mensagem:
+                    type: string
+                    example: Cliente não encontrado
+                  retorno:
+                    type: boolean
+                    example: false
+              examples:
+                Consultar:
+                  value:
+                    cliente: []
+                    mensagem: Cliente não encontrado
+                    retorno: false
+  /cliente/linhas:
+    get:
+      tags:
+        - Cliente
+      summary: Linhas do Cliente
+      description: >-
+        Consulta linhas sob titularidade de um cliente.
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | documento | String | CPF ou CNPJ do cliente | * |
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | retorno | Booleano | Retorno de sucesso do endpoint |
+
+        | mensagem | String | Mensagem de retorno da api, como descrição de um
+        erro por exemplo |
+
+        | linha | String | Número da linha |
+
+        | iccid | String | ICCID da linha |
+
+        | status | String | Status atual da linha |
+      operationId: linhasDoCliente
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                documento:
+                  type: string
+                  example: cpf_ou_cnpj
+            example:
+              documento: cpf_ou_cnpj
+      responses:
+        '200':
+          description: Linhas do Cliente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  linhas:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        iccid:
+                          type: string
+                          example: 8955...
+                        linha:
+                          type: string
+                          example: '51900000000'
+                        status:
+                          type: string
+                          example: ATIVA
+                    example:
+                      - iccid: 8955...
+                        linha: '51900000000'
+                        status: ATIVA
+                      - iccid: 8955...
+                        linha: '51011111111'
+                        status: CANCELADA
+                  mensagem:
+                    type: string
+                    example: ''
+                  retorno:
+                    type: boolean
+                    example: true
+              examples:
+                Linhas do Cliente:
+                  value:
+                    linhas:
+                      - iccid: 8955...
+                        linha: '51900000000'
+                        status: ATIVA
+                      - iccid: 8955...
+                        linha: '51011111111'
+                        status: CANCELADA
+                    mensagem: ''
+                    retorno: true
+  /cliente/listar:
+    get:
+      tags:
+        - Cliente
+      summary: Listar
+      description: >-
+        Listagem de todos os clientes.
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | retorno | Booleano | Retorno de sucesso do endpoint |
+
+        | mensagem | String | Mensagem de retorno da api, como mensagem de erro
+        por exemplo |
+
+        | tipo | String | Tipo de cliente: PF ou PJ |
+
+        | nome | String | Nome completo |
+
+        | cpf | String | CPF |
+
+        | cnpj | String | CNPJ |
+
+        | nascimento | String | Data de nascimento |
+
+        | endereco_rua | String | Rua |
+
+        | endereco_numero | String | Número |
+
+        | endereco_bairro | String | Bairro |
+
+        | endereco_cep | String | CEP |
+
+        | endereco_complemento | String | Complemento |
+
+        | endereco_cidade | String | Cidade |
+
+        | endereco_uf | String | Estado |
+
+        | fone_contato | String | Telefone alternativo de contato |
+
+        | email_contato | String | E-mail de contato |
+
+        | apelido | String | Apelido ou nome social do cliente |
+      operationId: listar
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                page:
+                  type: number
+                  example: 1
+            example:
+              page: 1
+      responses:
+        '200':
+          description: Listar
+          content:
+            text/plain:
+              examples:
+                Listar:
+                  value: ''
+  /linhas/detalhes:
+    get:
+      tags:
+        - Linha
+      summary: Detalhes da linha
+      description: >-
+        Detalhamento de todos os dados uma linha, com informações como plano,
+        titularidade e datas.
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | numero | String | Número da linha do cliente, com 11 dígitos (DDD +
+        número) | \* |
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | retorno | Booleano | Retorno de sucesso do endpoint |
+
+        | mensagem | String | Mensagem de retorno da api, como mensagem de erro
+        por exemplo |
+
+        | id | String | ID / código identificador da linha |
+
+        | id_linha | String | ID que identifica a linha no cadastro do
+        aplicativo do cliente. |
+
+        | linha | String | Número da linha |
+
+        | linha_apelido | String | Nome de identificação da linha. Este nome
+        pode ser definido / personalizado pela franquia / marca |
+
+        | iccid | String | ICCID da linha |
+
+        | titular | String | Nome completo do titular da linha |
+
+        | titular_apelido | String | Apelido ou nome social do cliente titular
+        da linha |
+
+        | motivo_cancelamento_linha | String | Motivo de cancelamento da linha,
+        quando a mesma estiver cancelada. Os motivos possíveis deste campo estão
+        detalhados abaixo |
+
+        | data_cancelamento_linha | String | Data em que a linha foi cancelada.
+        |
+
+        | nome_identificacao | String | Nome de identificação para a linha, como
+        por exemplo "TRABALHO". Este só pode ser definido pelo cliente no APP |
+
+        | emoji | String | Emoji de identificação para a linha |
+
+        | data_ativacao | String | Data em que a linha foi ativada |
+
+        | data_inicio_plano | String | Data de início do último plano da linha
+        do cliente |
+
+        | data_fim_plano | String | Data de fim de plano da linha. |
+
+        | data_renovacao | String | Data mensal de renovação. Atualmente essa
+        data é igual à data_fim_plano, pois segue a mesma regra |
+
+        | plano | String | Plano atual ativo na linha ou último plano ativo
+        (para clientes sem plano ativo) |
+
+        | tipo_linha | String | Identifica o tipo de linha: PRÉ PAGO ou CONTROLE
+        INTELIGENTE |
+
+        | documento_titular | String | Documento do titular da linha |
+
+        | status | String | Status atual da linha. "ATIVO" para linha ativas
+        (com ou sem plano ativo) e "CANCELADO" para linhas que já saíram da
+        base. |
+
+        | recorrencia_cartao | String | Possíveis retornos: "ATIVA" ou
+        "INATIVA". Identifica se a linha possui recarga programada no cartão de
+        crédito. |
+
+        | portin | String | Possíveis retornos: "SIM" ou "NÃO". Identifica se a
+        linha é portada, ou seja, se veio de outra operadora. |
+
+        | esim | String | Possíveis retornos: "SIM" ou "NÃO". Identifica se a
+        linha é eSIM, ou seja, chip virtual. |
+
+        | esim_pdf | String | Quando eSIM, retorna o link do pdf de instalação
+        do eSIM. |
+
+        | bloqueada | String | Possíveis retornos: "SIM" ou "NÃO". Identifica se
+        a linha está bloqueada. |
+
+        | recarga_automatica | String | Possíveis retornos: "ATIVA" ou
+        "INATIVA". Identifica se a linha possui recarga programada, de forma
+        automática, por SALDO. |
+
+        | recarga_automatica_plano | String | Se recarga_automática for "ATIVA",
+        retorna o nome do plano programado. |
+
+        | data_perda_numero_falta_recarga | String | É a data em que o cliente
+        perderá a linha caso pare de realizar recargas. |
+
+        | tipo_linha | String | Identifica o tipo de linha. Pode ser "PRÉ PAGO"
+        ou "CONTROLE INTELIGENTE". |
+
+        | cor_app | String | Cor padrão de estilo da linha no APP |
+
+        | portabilidade_linha_doadora | String | Quando a linha tiver
+        portabilidade, retorna o número da operadora doadora. |
+
+        | portabilidade_status | String | Quando a linha tiver portabilidade,
+        retorna o status atual da portabilidade. |
+
+        | portabilidade_data_cadastro | String | Quando a linha tiver
+        portabilidade, retorna a data de cadastro. |
+
+        | portabilidade_data_agendamento | String | Quando a linha tiver
+        portabilidade, retorna a data de agendamento. |
+
+        | portabilidade_data_aceite | String | Quando a linha tiver
+        portabilidade, retorna a data de aceite do SMS. |
+
+        | portabilidade_data_sucesso | String | Quando a linha tiver
+        portabilidade, retorna a data de sucesso, caso a portabilidade tenha
+        ocorrido com sucesso. |
+
+
+        Os possíveis motivos de cancelamento de uma linha podem ser:
+
+
+        **EX:** Quando o cliente para de realizar recargas e a linha expira.
+        Acontece 75 dias após a última data de fim de plano.
+
+
+        **PORTOUT:** Linha portada para outra operadora.
+
+
+        **TROCA DE CHIP:** Chip cancelado pois houve troca de chip. Na troca de
+        chip, o cliente continua com seu número, porém, por algum motivo (perda,
+        roubo, etc) é realizada a troca do chip do cliente para um chip virgem,
+        para continuar com o mesmo número. Assim, o chip antigo, é cancelado.
+
+
+        **PORTABILIDADE ENTRE MARCAS:** Quando o cliente sai da base pois migrou
+        sua linha para outra operadora criada pela Contel.
+
+
+        **SOLICITAÇÃO DO CLIENTE:** Cliente entrou em contato com o SAC
+        solicitando o cancelamento de sua linha.
+      operationId: detalhesDaLinha
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                numero:
+                  type: string
+                  example: numero_da_linha
+            example:
+              numero: numero_da_linha
+      responses:
+        '200':
+          description: Detalhar
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  detalhes:
+                    type: array
+                    items: {}
+                    example: []
+                  mensagem:
+                    type: string
+                    example: Linha não encontrada.
+                  retorno:
+                    type: boolean
+                    example: false
+              examples:
+                Detalhar:
+                  value:
+                    detalhes: []
+                    mensagem: Linha não encontrada.
+                    retorno: false
+  /linhas/saldo:
+    get:
+      tags:
+        - Linha
+      summary: Consultar Saldo
+      description: >-
+        Consulta de saldo disponível de uma linha.
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | linha | String | Número da linha do cliente, com 11 dígitos (DDD +
+        número) | * |
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | retorno | Booleano | Retorno de sucesso do endpoint |
+
+        | mensagem | String | Mensagem de retorno da api, como descrição de erro
+        por exemplo |
+
+        | restante_dados | Decimal | Quantidade de dados restantes. O retorno
+        significa a quantidade de MB ainda disponíveis. A atualização do saldo
+        acontece em um intervalo de 30 minutos aproximadamente |
+
+        | restante_minutos | Int | Quantidade de minutos restantes. O retorno
+        significa a quantidade de minutos ainda disponíveis. Um total acima de
+        999 significa que o plano possui ligações ilimitadas. A atualização do
+        saldo acontece em um intervalo de 30 minutos aproximadamente |
+
+        | restante_sms | Int | Quantidade de SMS restantes. O retorno significa
+        a quantidade de SMS ainda disponíveis. A atualização do saldo acontece
+        em um intervalo de 30 minutos aproximadamente |
+      operationId: consultarSaldo
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                linha:
+                  type: string
+                  example: numero_da_linha
+            example:
+              linha: numero_da_linha
+      responses:
+        '200':
+          description: Consultar Saldo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      restante_dados:
+                        type: number
+                        example: 2395.226721
+                      restante_minutos:
+                        type: number
+                        example: 60
+                      restante_sms:
+                        type: number
+                        example: 60
+                  mensagem:
+                    type: string
+                    example: ''
+                  retorno:
+                    type: boolean
+                    example: true
+              examples:
+                Consultar Saldo:
+                  value:
+                    data:
+                      restante_dados: 2395.226721
+                      restante_minutos: 60
+                      restante_sms: 60
+                    mensagem: ''
+                    retorno: true
+  /linhas/historico:
+    get:
+      tags:
+        - Linha
+      summary: Histórico de Recargas
+      description: >-
+        Histórico de recargas realizadas para uma determinada linha.
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | numero | String | Número da linha do cliente, com 11 dígitos (DDD +
+        número) | \* |
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | retorno | Booleano | Retorno de sucesso do endpoint |
+
+        | mensagem | String | Mensagem de retorno da api, como descrição de erro
+        por exemplo |
+
+        | data_cadastro | String | Data e hora da solicitação da recarga |
+
+        | data_recarga | String | Data e hora de realização da recarga |
+
+        | plano | String | Plano recarregado |
+
+        | valor | String | Valor pago |
+
+        | formaPagto | String | Forma de pagamento da recarga |
+
+        | valor_pago | String | Valor pago pela franquia / marca. Não é o valor
+        total do plano ou valor pago pelo cliente. |
+
+        | solicitado_por | String | Quem solicitou a recarga |
+      operationId: histRicoDeRecargas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                numero:
+                  type: string
+                  example: numero_da_linha
+            example:
+              numero: numero_da_linha
+      responses:
+        '200':
+          description: Histórico de Recargas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  historico:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        data_cadastro:
+                          type: string
+                          example: '2022-06-15 11:59:34.553'
+                        data_recarga:
+                          type: string
+                          example: '2022-06-15 11:59:35.000'
+                        formaPagto:
+                          type: string
+                          example: LINK
+                        plano:
+                          type: string
+                          example: 7 GB
+                        solicitado_por:
+                          type: string
+                          example: ''
+                        valor:
+                          type: string
+                          example: '44.90'
+                        valor_pago:
+                          type: string
+                          example: '44.90'
+                    example:
+                      - data_cadastro: '2022-06-15 11:59:34.553'
+                        data_recarga: '2022-06-15 11:59:35.000'
+                        formaPagto: LINK
+                        plano: 7 GB
+                        solicitado_por: ''
+                        valor_pago: '44.90'
+                      - data_cadastro: '2022-05-12 19:21:36.640'
+                        data_recarga: '2022-05-12 19:21:38.000'
+                        formaPagto: LINK
+                        plano: 7 GB
+                        solicitado_por: ''
+                        valor: '44.90'
+                        valor_pago: '44.90'
+                  mensagem:
+                    type: string
+                    example: ''
+                  retorno:
+                    type: boolean
+                    example: true
+              examples:
+                Histórico de Recargas:
+                  value:
+                    historico:
+                      - data_cadastro: '2022-06-15 11:59:34.553'
+                        data_recarga: '2022-06-15 11:59:35.000'
+                        formaPagto: LINK
+                        plano: 7 GB
+                        solicitado_por: ''
+                        valor_pago: '44.90'
+                      - data_cadastro: '2022-05-12 19:21:36.640'
+                        data_recarga: '2022-05-12 19:21:38.000'
+                        formaPagto: LINK
+                        plano: 7 GB
+                        solicitado_por: ''
+                        valor: '44.90'
+                        valor_pago: '44.90'
+                    mensagem: ''
+                    retorno: true
+  /linhas/verificaExistencia:
+    get:
+      tags:
+        - Linha
+      summary: Validar Existência
+      description: >-
+        Validação de um número de linha.
+
+
+        Retorna se um número existe ou não na base.
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | numero | String | Número da linha do cliente, com 11 dígitos (DDD +
+        número) | * |
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | retorno | Booleano | Retorno de sucesso do endpoint |
+
+        | mensagem | String | Mensagem de retorno da api, como descrição de erro
+        por exemplo |
+
+        | existe | Booleano | Retorna "true" caso a linha exista e "false" caso
+        a linha não tenha sido encontrada |
+
+        | existe_msg | String | Descrição sobre a existência da linha |
+      operationId: validarExistNcia
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                numero:
+                  type: string
+                  example: numero_da_linha
+            example:
+              numero: numero_da_linha
+      responses:
+        '200':
+          description: Validar Existência
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  existencia:
+                    type: object
+                    properties:
+                      existe:
+                        type: boolean
+                        example: false
+                      existe_msg:
+                        type: string
+                        example: Linha não encontrada.
+                  mensagem:
+                    type: string
+                    example: ''
+                  retorno:
+                    type: boolean
+                    example: false
+              examples:
+                Validar Existência:
+                  value:
+                    existencia:
+                      existe: false
+                      existe_msg: Linha não encontrada.
+                    mensagem: ''
+                    retorno: false
+  /linhas/numeroPeloIccid:
+    get:
+      tags:
+        - Linha
+      summary: Consultar pelo ICCID
+      description: >-
+        Consulta o número de uma linha através do ICCID.
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | iccid | String | Número do ICCID da linha que você deseja consultar |
+        * |
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | retorno | Booleano | Retorno de sucesso do endpoint |
+
+        | mensagem | String | Mensagem de retorno da api, como descrição de erro
+        por exemplo |
+
+        | numero | String | Número da linha associado ao ICCID |
+      operationId: consultarPeloIccid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                iccid:
+                  type: string
+                  example: iccid
+            example:
+              iccid: iccid
+      responses:
+        '200':
+          description: Consultar pelo ICCID
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mensagem:
+                    type: string
+                    example: ''
+                  numero:
+                    type: string
+                    example: '51900000000'
+                  retorno:
+                    type: boolean
+                    example: true
+              examples:
+                Consultar pelo ICCID:
+                  value:
+                    mensagem: ''
+                    numero: '51900000000'
+                    retorno: true
+  /linhas/validaTitularidade:
+    get:
+      tags:
+        - Linha
+      summary: Validar Titularidade
+      description: >-
+        Valida, se para um número de linha e número de documento enviados, se o
+        documento enviado é o mesmo que o documento que consta no titular da
+        linha.
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | linha | String | Número da linha do cliente, com 11 dígitos (DDD +
+        número) | \* |
+
+        | documento | String | Número do documento do cliente (CPF ou CNPJ),
+        somente números | \* |
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | retorno | Booleano | Retorno de sucesso do endpoint. |
+
+        | mensagem | String | Mensagem de retorno da api, como descrição de erro
+        por exemplo. |
+
+        | titular_linha | String | Possíveis retornos: "N" - o titular da linha
+        informada não é o documento informado ou "S" - onde o titular da linha é
+        o documento que foi enviado. |
+
+        | operadora | String | Nome da operadora a qual pertence a linha. |
+      operationId: validarTitularidade
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                documento:
+                  type: string
+                  example: documento
+                linha:
+                  type: string
+                  example: numero_da_linha
+            example:
+              documento: documento
+              linha: numero_da_linha
+      responses:
+        '200':
+          description: Validar Titularidade
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mensagem:
+                    type: string
+                    example: ''
+                  retorno:
+                    type: boolean
+                    example: true
+                  titular_linha:
+                    type: string
+                    example: S
+              examples:
+                Validar Titularidade:
+                  value:
+                    mensagem: ''
+                    retorno: true
+                    titular_linha: S
+  /linhas/listar:
+    get:
+      tags:
+        - Linha
+      summary: Listar Todas
+      description: >-
+        Lista todas as linhas da base.
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | retorno | Booleano | Retorno de sucesso do endpoint |
+
+        | mensagem | String | Mensagem de retorno da api, como mensagem de erro
+        por exemplo |
+
+        | id | String | ID / código identificador da linha |
+
+        | linha | String | Número da linha |
+
+        | linha_apelido | String | Nome de identificação da linha. Este nome
+        pode ser definido / personalizado pela franquia / marca |
+
+        | iccid | String | ICCID da linha |
+
+        | titular | String | Nome completo do titular da linha |
+
+        | titular_apelido | String | Apelido ou nome social do cliente titular
+        da linha |
+
+        | motivo_cancelamento_linha | String | Motivo de cancelamento da linha,
+        quando a mesma estiver cancelada. Os motivos possíveis deste campo estão
+        detalhados abaixo |
+
+        | data_cancelamento_linha | String | Data em que a linha foi cancelada.
+        |
+
+        | nome_identificacao | String | Nome de identificação para a linha, como
+        por exemplo "TRABALHO". Este só pode ser definido pelo cliente no APP |
+
+        | emoji | String | Emoji de identificação para a linha |
+
+        | data_ativacao | String | Data em que a linha foi ativada |
+
+        | data_inicio_plano | String | Data de início do último plano da linha
+        do cliente |
+
+        | data_fim_plano | String | Data de fim de plano da linha. |
+
+        | data_renovacao | String | Data mensal de renovação. Atualmente essa
+        data é igual à data_fim_plano, pois segue a mesma regra |
+
+        | plano | String | Plano atual ativo na linha ou último plano ativo
+        (para clientes sem plano ativo) |
+
+        | documento_titular | String | Documento do titular da linha |
+
+        | status | String | Status atual da linha. "ATIVO" para linha ativas
+        (com ou sem plano ativo) e "CANCELADO" para linhas que já saíram da
+        base. |
+
+        | recorrencia_cartao | String | Possíveis retornos: "ATIVA" ou
+        "INATIVA". Identifica se a linha possui recarga programada no cartão de
+        crédito. |
+
+        | portin | String | Possíveis retornos: "SIM" ou "NÃO". Identifica se a
+        linha é portada, ou seja, se veio de outra operadora. |
+
+        | esim | String | Possíveis retornos: "SIM" ou "NÃO". Identifica se a
+        linha é eSIM, ou seja, chip virtual. |
+
+        | bloqueada | String | Possíveis retornos: "SIM" ou "NÃO". Identifica se
+        a linha está bloqueada. |
+
+        | recarga_automatica | String | Possíveis retornos: "ATIVA" ou
+        "INATIVA". Identifica se a linha possui recarga programada, de forma
+        automática, por SALDO. |
+
+        | recarga_automatica_plano | String | Se recarga_automática for "ATIVA",
+        retorna o nome do plano programado. |
+
+        | data_perda_numero_falta_recarga | String | É a data em que o cliente
+        perderá a linha caso pare de realizar recargas. |
+
+        | tipo_linha | String | Identifica o tipo de linha. Pode ser "PRÉ PAGO"
+        ou "CONTROLE INTELIGENTE". |
+
+
+        Os possíveis motivos de cancelamento de uma linha podem ser:
+
+
+        **EX:** Quando o cliente para de realizar recargas e a linha expira.
+        Acontece 75 dias após a última data de fim de plano.
+
+
+        **PORTOUT:** Linha portada para outra operadora.
+
+
+        **TROCA DE CHIP:** Chip cancelado pois houve troca de chip. Na troca de
+        chip, o cliente continua com seu número, porém, por algum motivo (perda,
+        roubo, etc) é realizada a troca do chip do cliente para um chip virgem,
+        para continuar com o mesmo número. Assim, o chip antigo, é cancelado.
+
+
+        **PORTABILIDADE ENTRE MARCAS:** Quando o cliente sai da base pois migrou
+        sua linha para outra operadora criada pela Contel.
+
+
+        **SOLICITAÇÃO DO CLIENTE:** Cliente entrou em contato com o SAC
+        solicitando o cancelamento de sua linha.
+      operationId: listarTodas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                page:
+                  type: number
+                  example: 1
+            example:
+              page: 1
+      responses:
+        '200':
+          description: ''
+  /linhas/estoque:
+    get:
+      tags:
+        - Linha
+      summary: Estoque Virgem
+      description: >-
+        Listagem do estoque de chips VIRGENS.
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | retorno | Booleano | Retorno de sucesso do endpoint |
+
+        | mensagem | String | Mensagem de retorno da api, como mensagem de erro
+        por exemplo |
+
+        | id | String | ID / identificador único do chip |
+
+        | iccid | String | Código iccid do chip |
+
+        | tipo | String | Tipo de chip. Pode ser "físico" ou "eSIM" |
+
+        | pdf_esim | String | Quando eSIM, retorna o PDF do eSIM. |
+
+
+        Ainda sobre o tipo de chip:
+
+
+        **Físico:** chip no plástico, aquele que o cliente deve destacar e
+        inserir no aparelho.
+
+
+        **eSIM:** chip virtual. Nova tecnologia disponível onde a instalação
+        acontece através de um QR Code.
+      operationId: estoqueVirgem
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tipo:
+                  type: string
+                  example: físico
+            example:
+              tipo: físico
+      responses:
+        '200':
+          description: ''
+  /linhas/cobrancasGeradas:
+    get:
+      tags:
+        - Linha
+      summary: Recargas Solicitadas
+      description: >-
+        Listagem de todas as solicitações de **recargas** para uma determinada
+        linha. Aqui são retornadas apenas as solicitações geradas e ainda não
+        pagas (em aberto). Também, retornamos apenas links gerados ainda não
+        expirados.
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | retorno | Booleano | Retorno de sucesso do endpoint |
+
+        | mensagem | String | Mensagem de retorno da api, como mensagem de erro
+        por exemplo |
+
+        | data_solicitacao | String | Data e hora em que a recarga foi
+        solicitada. |
+
+        | link | String | Link para pagamento, quando a forma de pgto for LINK.
+        |
+
+        | valor | String | Valor total. Soma dos valores dos planos das linhas.
+        |
+
+        | boleto_link | String | Link do boleto, quando a forma de pgto for
+        BOLETO. |
+
+        | boleto_codigo_barras | String | Código de barras do boleto, quando a
+        forma de pgto for BOLETO. |
+
+        | pix_QRCode | String | Link da imagem com QR Code do PIX, quando a
+        forma de pgto for PIX. |
+
+        | pix_copia_cola | String | Pix copia e cola, quando a forma de pgto for
+        PIX. |
+
+        | cartao_de_credito | String | Link para pgto por cartão de crédito,
+        quando a forma de pgto for CARTÃO DE CRÉDITO. |
+
+
+        Observação: uma solicitação de recarga retornada neste endpoint não
+        significa que o cliente possui débito ou tenha que, obrigatoriamente,
+        realizar o pagamento. Cada cliente pode solicitar recarga quando quiser
+        e os links gerados não necessariamente geram o compromisso de serem
+        pagos.
+      operationId: recargasSolicitadas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                numero:
+                  type: string
+                  example: '51900000000'
+            example:
+              numero: '51900000000'
+      responses:
+        '200':
+          description: ''
+  /linhas/atualizar:
+    post:
+      tags:
+        - Linha
+      summary: Atualizar Apelido Linha
+      description: >-
+        Utilize este endpoint para adicionar ou alterar um apelido para uma
+        linha, a fim de facilitar a identificação da mesma.
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | linha | String | Número da linha do cliente | \* |
+
+        | linha_apelido | String | Apelido / nome de identificação desejado / do
+        cliente | \* |
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | mensagem | String | Mensagem de retorno da api |
+      operationId: atualizarApelidoLinha
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                linha:
+                  type: string
+                  example: '51900000000'
+                linha_apelido:
+                  type: string
+                  example: Apelido de identificação da linha
+            example:
+              linha: '51900000000'
+              linha_apelido: Apelido de identificação da linha
+      responses:
+        '200':
+          description: ''
+  /linhas/consumo/dados:
+    get:
+      tags:
+        - Histórico de consumo
+      summary: Dados
+      description: >-
+        Consulta do histórico de consumo de dados (internet) de uma linha.
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | linha | String | Número da linha do cliente | \* |
+
+        | mes | String | Mês de referência da consulta de histórico. Formato:
+        MM/YYYY | \* |
+
+        | ano | String | Ano de referência da consulta de histórico. Formato:
+        YYYY | \* |
+
+        | data_inicio | String | Você pode buscar o consumo por período, ao
+        invés de um mês / ano específico. Para isso, não envie "mes" e "ano" e
+        envie "data_inicio" e "data_fim" |  |
+
+        | data_fim | String | Você pode buscar o consumo por período, ao invés
+        de um mês / ano específico. Para isso, não envie "mes" e "ano" e envie
+        "data_inicio" e "data_fim" |  |
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | retorno | Booleano | Retorno de sucesso do endpoint |
+
+        | mensagem | String | Mensagem de retorno da api, como descrição de erro
+        por exemplo |
+
+        | totalConsumo | Int | Quantidade utilizada na data. Retorno é em Bytes
+        |
+
+        | dtConsumo | String | Data |
+      operationId: dados
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ano:
+                  type: string
+                  example: '2022'
+                linha:
+                  type: string
+                  example: numero_da_linha
+                mes:
+                  type: string
+                  example: '01'
+            example:
+              ano: '2022'
+              linha: numero_da_linha
+              mes: '01'
+      responses:
+        '200':
+          description: Dados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        dtConsumo:
+                          type: string
+                          example: '2022-06-01T03:00:00.000Z'
+                        totalConsumo:
+                          type: number
+                          example: 129598970
+                    example:
+                      - dtConsumo: '2022-06-01T03:00:00.000Z'
+                        totalConsumo: 129598970
+                      - dtConsumo: '2022-06-02T03:00:00.000Z'
+                        totalConsumo: 381
+                      - dtConsumo: '2022-06-03T03:00:00.000Z'
+                        totalConsumo: 1396
+                      - dtConsumo: '2022-06-06T03:00:00.000Z'
+                        totalConsumo: 0
+                      - dtConsumo: '2022-06-07T03:00:00.000Z'
+                        totalConsumo: 628090436
+                      - dtConsumo: '2022-06-08T03:00:00.000Z'
+                        totalConsumo: 887927291
+                      - dtConsumo: '2022-06-09T03:00:00.000Z'
+                        totalConsumo: 2103165882
+                      - dtConsumo: '2022-06-10T03:00:00.000Z'
+                        totalConsumo: 212912899
+                      - dtConsumo: '2022-06-12T03:00:00.000Z'
+                        totalConsumo: 379325020
+                      - dtConsumo: '2022-06-13T03:00:00.000Z'
+                        totalConsumo: 591776394
+                      - dtConsumo: '2022-06-14T03:00:00.000Z'
+                        totalConsumo: 1077623090
+                      - dtConsumo: '2022-06-15T03:00:00.000Z'
+                        totalConsumo: 990238105
+                      - dtConsumo: '2022-06-17T03:00:00.000Z'
+                        totalConsumo: 626280334
+                      - dtConsumo: '2022-06-18T03:00:00.000Z'
+                        totalConsumo: 17217982
+                      - dtConsumo: '2022-06-19T03:00:00.000Z'
+                        totalConsumo: 54879740
+                      - dtConsumo: '2022-06-20T03:00:00.000Z'
+                        totalConsumo: 469683185
+                      - dtConsumo: '2022-06-21T03:00:00.000Z'
+                        totalConsumo: 576521966
+                      - dtConsumo: '2022-06-22T03:00:00.000Z'
+                        totalConsumo: 443797710
+                      - dtConsumo: '2022-06-23T03:00:00.000Z'
+                        totalConsumo: 803209126
+                      - dtConsumo: '2022-06-24T03:00:00.000Z'
+                        totalConsumo: 272906005
+                      - dtConsumo: '2022-06-27T03:00:00.000Z'
+                        totalConsumo: 499374205
+                      - dtConsumo: '2022-06-28T03:00:00.000Z'
+                        totalConsumo: 108291069
+                      - dtConsumo: '2022-06-29T03:00:00.000Z'
+                        totalConsumo: 338798665
+                  mensagem:
+                    type: string
+                    example: ''
+                  retorno:
+                    type: boolean
+                    example: true
+              examples:
+                Dados:
+                  value:
+                    data:
+                      - dtConsumo: '2022-06-01T03:00:00.000Z'
+                        totalConsumo: 129598970
+                      - dtConsumo: '2022-06-02T03:00:00.000Z'
+                        totalConsumo: 381
+                      - dtConsumo: '2022-06-03T03:00:00.000Z'
+                        totalConsumo: 1396
+                      - dtConsumo: '2022-06-06T03:00:00.000Z'
+                        totalConsumo: 0
+                      - dtConsumo: '2022-06-07T03:00:00.000Z'
+                        totalConsumo: 628090436
+                      - dtConsumo: '2022-06-08T03:00:00.000Z'
+                        totalConsumo: 887927291
+                      - dtConsumo: '2022-06-09T03:00:00.000Z'
+                        totalConsumo: 2103165882
+                      - dtConsumo: '2022-06-10T03:00:00.000Z'
+                        totalConsumo: 212912899
+                      - dtConsumo: '2022-06-12T03:00:00.000Z'
+                        totalConsumo: 379325020
+                      - dtConsumo: '2022-06-13T03:00:00.000Z'
+                        totalConsumo: 591776394
+                      - dtConsumo: '2022-06-14T03:00:00.000Z'
+                        totalConsumo: 1077623090
+                      - dtConsumo: '2022-06-15T03:00:00.000Z'
+                        totalConsumo: 990238105
+                      - dtConsumo: '2022-06-17T03:00:00.000Z'
+                        totalConsumo: 626280334
+                      - dtConsumo: '2022-06-18T03:00:00.000Z'
+                        totalConsumo: 17217982
+                      - dtConsumo: '2022-06-19T03:00:00.000Z'
+                        totalConsumo: 54879740
+                      - dtConsumo: '2022-06-20T03:00:00.000Z'
+                        totalConsumo: 469683185
+                      - dtConsumo: '2022-06-21T03:00:00.000Z'
+                        totalConsumo: 576521966
+                      - dtConsumo: '2022-06-22T03:00:00.000Z'
+                        totalConsumo: 443797710
+                      - dtConsumo: '2022-06-23T03:00:00.000Z'
+                        totalConsumo: 803209126
+                      - dtConsumo: '2022-06-24T03:00:00.000Z'
+                        totalConsumo: 272906005
+                      - dtConsumo: '2022-06-27T03:00:00.000Z'
+                        totalConsumo: 499374205
+                      - dtConsumo: '2022-06-28T03:00:00.000Z'
+                        totalConsumo: 108291069
+                      - dtConsumo: '2022-06-29T03:00:00.000Z'
+                        totalConsumo: 338798665
+                    mensagem: ''
+                    retorno: true
+  /linhas/consumo/voz:
+    get:
+      tags:
+        - Histórico de consumo
+      summary: Voz
+      description: >-
+        Consulta do histórico de ligações de uma linha.
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | linha | String | Número da linha do cliente | \* |
+
+        | mes | String | Mês de referência da consulta de histórico. Formato:
+        MM/YYYY | \* |
+
+        | ano | String | Ano de referência da consulta de histórico. Formato:
+        YYYY | \* |
+
+        | data_inicio | String | Você pode buscar o consumo por período, ao
+        invés de um mês / ano específico. Para isso, não envie "mes" e "ano" e
+        envie "data_inicio" e "data_fim" |  |
+
+        | data_fim | String | Você pode buscar o consumo por período, ao invés
+        de um mês / ano específico. Para isso, não envie "mes" e "ano" e envie
+        "data_inicio" e "data_fim" |  |
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | retorno | Booleano | Retorno de sucesso do endpoint |
+
+        | mensagem | String | Mensagem de retorno da api, como descrição de erro
+        por exemplo |
+
+        | qtUsado | Int | Quantidade utilizada na data. Retorno é em segundos |
+
+        | dtConsumo | String | Data |
+      operationId: voz
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ano:
+                  type: string
+                  example: '2022'
+                linha:
+                  type: string
+                  example: numero_da_linha
+                mes:
+                  type: string
+                  example: '01'
+            example:
+              ano: '2022'
+              linha: numero_da_linha
+              mes: '01'
+      responses:
+        '200':
+          description: Voz
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        dtConsumo:
+                          type: string
+                          example: '2022-01-01T03:00:00.000Z'
+                        qtUsado:
+                          type: number
+                          example: 30
+                    example:
+                      - dtConsumo: '2022-01-01T03:00:00.000Z'
+                        qtUsado: 30
+                      - dtConsumo: '2022-01-02T03:00:00.000Z'
+                        qtUsado: 10
+                  mensagem:
+                    type: string
+                    example: ''
+                  retorno:
+                    type: boolean
+                    example: true
+              examples:
+                Voz:
+                  value:
+                    data:
+                      - dtConsumo: '2022-01-01T03:00:00.000Z'
+                        qtUsado: 30
+                      - dtConsumo: '2022-01-02T03:00:00.000Z'
+                        qtUsado: 10
+                    mensagem: ''
+                    retorno: true
+  /linhas/consumo/sms:
+    get:
+      tags:
+        - Histórico de consumo
+      summary: SMS
+      description: >-
+        Consulta do histórico de envios de SMS de uma linha.
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | linha | String | Número da linha do cliente | \* |
+
+        | mes | String | Mês de referência da consulta de histórico. Formato:
+        MM/YYYY | \* |
+
+        | ano | String | Ano de referência da consulta de histórico. Formato:
+        YYYY | \* |
+
+        | data_inicio | String | Você pode buscar o consumo por período, ao
+        invés de um mês / ano específico. Para isso, não envie "mes" e "ano" e
+        envie "data_inicio" e "data_fim" |  |
+
+        | data_fim | String | Você pode buscar o consumo por período, ao invés
+        de um mês / ano específico. Para isso, não envie "mes" e "ano" e envie
+        "data_inicio" e "data_fim" |  |
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | retorno | Booleano | Retorno de sucesso do endpoint |
+
+        | mensagem | String | Mensagem de retorno da api, como descrição de erro
+        por exemplo |
+
+        | qtUsado | Int | Quantidade de SMS enviados no dia |
+
+        | dtConsumo | String | Data |
+      operationId: sms
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ano:
+                  type: string
+                  example: '2022'
+                linha:
+                  type: string
+                  example: numero_da_linha
+                mes:
+                  type: string
+                  example: '01'
+            example:
+              ano: '2022'
+              linha: numero_da_linha
+              mes: '01'
+      responses:
+        '200':
+          description: SMS
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        dtConsumo:
+                          type: string
+                          example: '2022-01-01T03:00:00.000Z'
+                        qtUsado:
+                          type: number
+                          example: 0
+                    example:
+                      - dtConsumo: '2022-01-01T03:00:00.000Z'
+                        qtUsado: 0
+                      - dtConsumo: '2022-01-02T03:00:00.000Z'
+                        qtUsado: 1
+                  mensagem:
+                    type: string
+                    example: ''
+                  retorno:
+                    type: boolean
+                    example: true
+              examples:
+                SMS:
+                  value:
+                    data:
+                      - dtConsumo: '2022-01-01T03:00:00.000Z'
+                        qtUsado: 0
+                      - dtConsumo: '2022-01-02T03:00:00.000Z'
+                        qtUsado: 1
+                    mensagem: ''
+                    retorno: true
+  /ativacao/solicitar:
+    post:
+      tags:
+        - Ativação
+      summary: Solicitar Ativação
+      description: >-
+        Solicitação de nova ativação de chip.
+
+
+        Para chip físico, enviar o "iccid" conforme tabela abaixo.
+
+
+        Para chip virtual (**eSIM**), não enviar "iccid" e enviar a seguinte
+        nomenclatura:
+
+
+        **"esim": "SIM"**
+
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | metodo_pagamento | String | É a forma de pagamento da ativação.
+        Padrão: "LINK" para gerar um link de pagamento ou "SALDO" para descontar
+        do saldo em carteira. | \* |
+
+        | nome | String | Nome completo do cliente conforme documento | \* |
+
+        | cpf | String | Número do CPF do cliente. Caso seja PJ, não enviar | \*
+        |
+
+        | cnpj | String | Número do CNPJ. Utilizar e enviar apenas se cliente
+        for PJ |  |
+
+        | email | String | Endereço de e-mail válido do cliente |  |
+
+        | telefone | String | Telefone de contato do cliente com DDD (11
+        dígitos) |  |
+
+        | data_nascimento | String | Data de nascimento do cliente no formato
+        YYYY-MM-DD | \*  <br>Para pessoa física |
+
+        | link_indicacao | String | Link de venda direta do PDV. Utilizar /
+        enviar apenas se estiver criando e utilizando o link de venda direta. | 
+        |
+
+        | endereco.rua | String | Nome da rua | \* |
+
+        | endereco.numero | String | Número do endereço | \* |
+
+        | endereco.complemento | String | Complemento ou ponto de referência | 
+        |
+
+        | endereco.bairro | String | Bairro | \* |
+
+        | endereco.cep | String | CEP, apenas números | \* |
+
+        | endereco.id_cidade | Int | ID da cidade, obtido no GET de listar
+        cidades | \* |
+
+        | chips.id_plano | Int | ID do plano que o cliente deseja ativar | \* |
+
+        | chips.ddd | Int | O DDD é o código da localidade do cliente. Exemplo:
+        o meu telefone é 51 99999-9999, sendo 51 o DDD | \* |
+
+        | chips.iccid | String | Número de 19 dígitos próximo ao código de
+        barras (inicia com 8955) | \* |
+
+        | sistema_origem | String | Campo livre para você salvar o nome do
+        sistema onde está integrando a api. Assim, facilitamos o suporte. |  |
+
+        | tag | String | Assim como o campo acima, você pode utilizar a tag como
+        um campo livre. Ela é geralmente utilizada para identificar campanhas
+        específicas. |  |
+
+        | recarga_automatica_saldo | Int | Aqui pode ser enviado um **id_plano**
+        para que, ao ativar, a linha já seja automaticamente adicionada à
+        recarga programada por SALDO. |  |
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | retorno | Booleano | Retorno de sucesso do endpoint |
+
+        | mensagem | String | Mensagem de retorno da api, como descrição de erro
+        por exemplo |
+
+        | info.id | Int | ID único identificador da ativação |
+
+        | info.id_cliente | Int | ID do cliente |
+
+        | info.data_cadastro | String | Data e hora da solicitação |
+
+        | chips.id | Int | ID único identificador do chip |
+
+        | ativacao.id_plano | String | ID do plano |
+
+        | ativacao.ddd | String | DDD da ativação |
+
+        | chips.iccid | String | ICCID para o qual a ativação foi solicitada |
+
+        | chips.esim | String | Identifica se a ativação é de um eSIM ou chip
+        físico. Valores possíveis: "S" (eSIM) ou "N" (chip físico) |
+
+        | link_pagamento | String | Link de pagamento da ativação, quando a
+        forma de pagamento for LINK |
+
+        | link_esim | String | Quando a ativação for de eSIM e o pagamento for
+        de alguma forma de pagamento que ativa na hora, este campo retornará o
+        link do PDF de instalação do eSIM |
+
+        | link_instrucoes | String | Quando a ativação for de eSIM e o pagamento
+        for de alguma forma de pagamento que ativa na hora, este campo retornará
+        um link com instruções de instalação do eSIM |
+
+        | boleto_link | String | Link do PDF do boleto, quando a recarga for em
+        BOLETO |
+
+        | boleto_codigo_barras | String | Código de barras do boleto, quando a
+        recarga for em BOLETO |
+
+        | pix_QRCode | String | QR Code do pix, quando o pagamento for por PIX |
+
+        | pix_copia_cola | String | Pix copia e cola, quando o pagamento for por
+        PIX |
+
+        | cartao_de_credito | String | Retorno de sucesso de pagamento por
+        cartão de crédito, quando o pagamento for por CARTÃO DE CRÉDITO |
+
+
+        Observações:
+
+
+        - **TAG**: O campo "tag" é um recurso que você pode utilizar para
+        identificar ativações oriundas de uma campanha / evento específico. Por
+        exemplo: enviando _"tag": "Feira ABC"_, poderemos posteriormente medir o
+        resultado desta feira, pois a tag identificará todas as ativações vindas
+        dela.
+
+        - Método de pagamento SALDO: é a forma mais indicada quando se deseja
+        utilizar o saldo em carteira na Contel para realizar os pgtos. Dessa
+        forma, o cliente pode ser cobrado em dinheiro ou utilizando outro
+        sistema / meio de pgto. Ao utilizar "SALDO", a sua margem já fica retida
+        e só é descontada a margem da Contel.
+      operationId: solicitarAtivaO
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                chips:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      ddd:
+                        type: number
+                        example: 51
+                      iccid:
+                        type: string
+                        example: 8955...
+                      id_plano:
+                        type: number
+                        example: 99999
+                  example:
+                    - ddd: 51
+                      iccid: 8955...
+                      id_plano: 99999
+                cpf:
+                  type: string
+                  example: '00000000000'
+                data_nascimento:
+                  type: string
+                  example: '1900-01-01'
+                email:
+                  type: string
+                  example: email@email.com
+                endereco:
+                  type: object
+                  properties:
+                    bairro:
+                      type: string
+                      example: Bairro
+                    cep:
+                      type: string
+                      example: '00000000'
+                    complemento:
+                      type: string
+                      example: Sala 03
+                    id_cidade:
+                      type: number
+                      example: 8066
+                    numero:
+                      type: string
+                      example: '123'
+                    rua:
+                      type: string
+                      example: Rua Exemplo
+                link_indicacao:
+                  type: string
+                  example: linkVendaDireta
+                metodo_pagamento:
+                  type: string
+                  example: LINK
+                nome:
+                  type: string
+                  example: Nome do Cliente
+                telefone:
+                  type: string
+                  example: '51999999999'
+            example:
+              chips:
+                - ddd: 51
+                  iccid: 8955...
+                  id_plano: 99999
+              cpf: '00000000000'
+              data_nascimento: '1900-01-01'
+              email: email@email.com
+              endereco:
+                bairro: Bairro
+                cep: '00000000'
+                complemento: Sala 03
+                id_cidade: 8066
+                numero: '123'
+                rua: Rua Exemplo
+              link_indicacao: linkVendaDireta
+              metodo_pagamento: LINK
+              nome: Nome do Cliente
+              telefone: '51999999999'
+      responses:
+        '200':
+          description: Solicitar Ativação
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: object
+                    properties:
+                      chips.0.id_plano:
+                        type: array
+                        items:
+                          type: string
+                          example: ID do plano informado não existe.
+                        example:
+                          - ID do plano informado não existe.
+                  message:
+                    type: string
+                    example: The given data was invalid.
+              examples:
+                Solicitar Ativação:
+                  value:
+                    errors:
+                      chips.0.id_plano:
+                        - ID do plano informado não existe.
+                    message: The given data was invalid.
+  /ativacao/detalhar:
+    get:
+      tags:
+        - Ativação
+      summary: Detalhar Ativação
+      description: >-
+        Busca os detalhes de uma ativação realizada, através do ICCID da linha.
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | iccid | String | Número do ICCID do chip que foi ativado | * |
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | retorno | Booleano | Retorno de sucesso do endpoint |
+
+        | mensagem | String | Mensagem de retorno da api, como descrição de erro
+        por exemplo |
+
+        | data_solicitacao | String | Data e hora da solicitação da ativação |
+
+        | data_ativacao | String | Data e hora da realização da ativação |
+
+        | cliente | String | Nome do cliente titular da linha |
+
+        | plano | String | Plano ativado |
+
+        | plano_nome | String | Nome do plano ativado |
+
+        | iccid | String | ICCID |
+
+        | numero_ativado | String | Número novo gerado no momento da ativação |
+
+        | numero_portado | String | Número portado |
+
+        | forma_pagamento | String | Forma de pagamento da ativação |
+      operationId: detalharAtivaO
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                iccid:
+                  type: string
+                  example: 8955...
+            example:
+              iccid: 8955...
+      responses:
+        '200':
+          description: Detalhar Ativação
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: object
+                    properties:
+                      iccid:
+                        type: array
+                        items:
+                          type: string
+                          example: ICCID informado não existe.
+                        example:
+                          - ICCID informado não existe.
+                  message:
+                    type: string
+                    example: The given data was invalid.
+              examples:
+                Detalhar Ativação:
+                  value:
+                    errors:
+                      iccid:
+                        - ICCID informado não existe.
+                    message: The given data was invalid.
+  /ativacao/verificaPlanoPago:
+    get:
+      tags:
+        - Ativação
+      summary: Verifica Plano Pago
+      description: >-
+        Verifica se um ICCID já possui plano pago.
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | iccid | String | Número do ICCID que será verificado | \* |
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | retorno | Boolean | Retorno de sucesso da api |
+
+        | mensagem | String | Mensagem de retorno |
+
+        | plano | String | ID do plano pago. Se retornar "null", significa que o
+        iccid não possui plano pago. |
+      operationId: verificaPlanoPago
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                iccid:
+                  type: string
+                  example: 8955...
+            example:
+              iccid: 8955...
+      responses:
+        '200':
+          description: ''
+  /ativacao/validaIccid:
+    post:
+      tags:
+        - Ativação
+      summary: Validar ICCID
+      description: >-
+        Realiza validação de um número de ICCID.
+
+
+        Retorna se o iccid existe, assim como informações como: iccid virgem,
+        iccid já ativo, etc.
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | iccid | String | Número do ICCID que será verificado | \* |
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | retorno | Booleano | Retorno de sucesso do endpoint |
+
+        | mensagem | String | Mensagem de retorno da api, como descrição de erro
+        por exemplo |
+
+        | info | String | Informação sobre o status do ICCID. Possíveis
+        retornos: "ICCID ativo", "ICCID virgem", "ICCID inválido" |
+
+        | codigo | String | Código que identifica o status do iccid |
+
+        | linha | String | Número da linha associada ao iccid, caso o iccid
+        esteja ativo |
+
+
+        Os possíveis **códigos** são:
+
+
+        - 99 - iccid inválido
+
+        - 33 - iccid com ativação em processamento (rodando alguma fila,
+        finalizando algum processo interno, ...)
+
+        - 22 - erro na ativação contendo este iccid
+
+        - 11 - iccid ativo
+
+        - 88 - iccid virgem
+      operationId: validarIccid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                iccid:
+                  type: string
+                  example: 8955...
+            example:
+              iccid: 8955...
+      responses:
+        '200':
+          description: Validar ICCID
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  codigo:
+                    type: number
+                    example: 88
+                  info:
+                    type: string
+                    example: ICCID virgem.
+                  linha:
+                    type: string
+                    example: ''
+                  mensagem:
+                    type: string
+                    example: ''
+                  retorno:
+                    type: boolean
+                    example: true
+              examples:
+                Validar ICCID:
+                  value:
+                    codigo: 88
+                    info: ICCID virgem.
+                    linha: ''
+                    mensagem: ''
+                    retorno: true
+  /recarga/solicitar:
+    post:
+      tags:
+        - Recarga
+      summary: Solicitar Recarga
+      description: >-
+        Solicitação de nova recarga de plano para uma linha.
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | metodo_pagamento | String | É a forma de pagamento da recarga. Padrão:
+        "LINK" para gerar um link de pagamento ou "SALDO" para descontar do
+        saldo em carteira. | \* |
+
+        | sms | String | Envie "S" para, ao solicitar, o cliente receber um sms
+        para pagamento da recarga. Caso o cliente não deva receber nada, envie
+        "N". |  |
+
+        | numero | String | Número da linha do cliente para a qual será
+        realizada a recarga. Enviar o número da linha com 11 dígitos (DDD +
+        número) | \* |
+
+        | id_plano | String | ID do plano que o cliente deseja recarregar. O
+        valor cobrado será de acordo com o valor que o plano enviado aqui
+        possui. | \* |
+
+        | sistema_origem | String | Campo livre para você salvar o nome do
+        sistema onde está integrando a api. Assim, facilitamos o suporte. |  |
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | retorno | String | Retorno de sucesso do endpoint |
+
+        | mensagem | String | Mensagem de retorno da api, como descrição de erro
+        por exemplo |
+
+        | id | String | ID único identificador da recarga |
+
+        | data_cadastro | String | Data e hora da solicitação de recarga |
+
+        | link_pagamento | String | Link para pagamento da recarga, quando a
+        recarga for em LINK |
+
+        | boleto_link | String | Link do PDF do boleto, quando a recarga for em
+        BOLETO |
+
+        | boleto_codigo_barras | String | Código de barras do boleto, quando a
+        recarga for em BOLETO |
+
+        | pix_QRCode | String | QR Code do pix, quando o pagamento for por PIX |
+
+        | pix_copia_cola | String | Pix copia e cola, quando o pagamento for por
+        PIX |
+
+        | cartao_de_credito | String | Retorno de sucesso de pagamento por
+        cartão de crédito, quando o pagamento for por CARTÃO DE CRÉDITO |
+
+
+        Observações:
+
+
+        - Método de pagamento SALDO: é a forma mais indicada quando se deseja
+        utilizar o saldo em carteira na Contel para realizar os pgtos. Dessa
+        forma, o cliente pode ser cobrado em dinheiro ou utilizando outro
+        sistema / meio de pgto. Ao utilizar "SALDO", a sua margem já fica retida
+        e só é descontada a margem da Contel.
+      operationId: solicitarRecarga
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                metodo_pagamento:
+                  type: string
+                  example: LINK
+                numeros:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id_plano:
+                        type: number
+                        example: 99999
+                      numero:
+                        type: string
+                        example: '5591920007217'
+                  example:
+                    - id_plano: 99999
+                      numero: '5591920007217'
+                sms:
+                  type: string
+                  example: S
+            example:
+              metodo_pagamento: LINK
+              numeros:
+                - id_plano: 99999
+                  numero: '5591920007217'
+              sms: S
+      responses:
+        '200':
+          description: Solicitar Recarga
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mensagem:
+                    type: string
+                    example: Cliente não encontrado.
+                  recarga:
+                    type: array
+                    items: {}
+                    example: []
+                  retorno:
+                    type: boolean
+                    example: false
+              examples:
+                Solicitar Recarga:
+                  value:
+                    mensagem: Cliente não encontrado.
+                    recarga: []
+                    retorno: false
+  /recarga/alterarStatusRecargaAutomatica:
+    post:
+      tags:
+        - Recarga
+      summary: Bloqueio / Desbloqueio
+      description: >-
+        Endpoint de bloqueio e desbloqueio de linha de recarga programada.
+
+
+        Toda vez em que uma linha estiver com recarga automática programada na
+        Contel e houver e necessidade de bloqueio da realização da próxima
+        recarga ou desbloqueio de renovação bloqueada, este é o endpoint que
+        realiza essas solicitações.
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | linha | String | Número da linha do cliente. Apenas números, com DDD.
+        | Se enviar a linha, você não precisa enviar iccid e id. |
+
+        | iccid | String | ICCID do chip | Se enviar o iccid, você não precisa
+        enviar linha e id. |
+
+        | id | Int | ID do chip | Se enviar o ID, você não precisa enviar linha
+        e iccid. |
+
+        | operacao | String | Para bloquear, envie "bloqueio". Para desbloquear,
+        envie "desbloqueio" | \* |
+
+        | origem | String | Para identificar o sistema de onde você está
+        chamando o endpoint. |  |
+
+        | motivo | String | Detalhe o motivo para, depois, nos relatórios, saber
+        o que causou o bloqueio ou desbloqueio. Exemplo: rescisão de contrato,
+        inadimplência, ... |  |
+
+
+        Observações:
+
+
+        - “linha”, “iccid“ e “id”: apenas o envio de um é obrigatorio. Você pode
+        escolher se deseja enviar para bloquear/desbloquear, o número da linha
+        do cliente, o iccid do chip ou o id do chip.
+        
+        
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | retorno | Boolean | Retorno de sucesso do endpoint |
+
+        | mensagem | String | Mensagem de retorno da api, como descrição de erro
+        por exemplo. |
+      operationId: bloqueioDesbloqueio
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                iccid:
+                  type: string
+                  example: 8955...
+                id:
+                  type: number
+                  example: 1111
+                linha:
+                  type: string
+                  example: 119...
+                motivo:
+                  type: string
+                  example: Rescisão de contrato
+                operacao:
+                  type: string
+                  example: bloqueio
+                origem:
+                  type: string
+                  example: SISTEMA XYZ
+            example:
+              iccid: 8955...
+              id: 1111
+              linha: 119...
+              motivo: Rescisão de contrato
+              operacao: bloqueio
+              origem: SISTEMA XYZ
+      responses:
+        '200':
+          description: ''
+  /recarga/saldo/adicionar:
+    post:
+      tags:
+        - Recarga
+      summary: Saldo - Programar
+      description: >-
+        Endpoint para programar / agendar recargas por SALDO.
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | Atributo | Tipo | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | linha | String | Número da linha, somente números. | \* |
+
+        | plano | String | ID do plano a ser programado para renovar mensalmente
+        | \* |
+
+        | quantidade_recargas | Int | Quantidade de recargas que você deseja
+        programar. Se não enviado, ficará sem validade. Se quiser, por exemplo,
+        programar apenas 12 recargas, basta enviar 12. |  |
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | retorno | Boolean | Retorno de sucesso do endpoint |
+
+        | mensagem | String | Mensagem de retorno da api, como descrição de erro
+        por exemplo. |
+
+        | proxima_recarga | String | Data em que ocorrerá a próxima renovação de
+        plano da linha, automaticamente, via SALDO |
+      operationId: saldoProgramar
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                linha:
+                  type: string
+                  example: '51900000000'
+                plano:
+                  type: number
+                  example: 99999
+                quantidade_recargas:
+                  type: number
+                  example: 1
+            example:
+              linha: '51900000000'
+              plano: 99999
+              quantidade_recargas: 1
+      responses:
+        '200':
+          description: ''
+  /portabilidade/solicitar:
+    post:
+      tags:
+        - Portabilidade
+      summary: Solicitar Portabilidade
+      description: >-
+        Solicitação de nova portabilidade.
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | numero_contel | String | Número da linha Contel, com 11 dígitos (DDD +
+        número) | \* |
+
+        | doador_numero | String | Número da linha doadora (linha que está na
+        outra operadora) com 11 dígitos (DDD + número) | \* |
+
+        | doador_id_operadora | Int | ID da operadora doadora. Pode ser obtido
+        através do endpoint de listagem de operadoras disponíveis. | \* |
+
+        | sistema_origem | String | Campo livre para você salvar o nome do
+        sistema onde está integrando a api. Assim, facilitamos o suporte. |  |
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | retorno | Booleano | Retorno de sucesso do endpoint |
+
+        | mensagem | String | Mensagem de retorno da api, como descrição de erro
+        por exemplo |
+
+        | doador_numero | String | Número da linha da operadora doadora |
+
+        | operadora | Int | ID da operadora doadora |
+
+        | id_chip | Int | ID da linha Contel (ou marca) |
+
+        | data_cadastro | String | Data e hora de cadastro da portabilidade |
+
+        | data_agendamento | String | Data de agendamento para ocorrência da
+        portabilidade, caso a abertura da mesma ocorra com sucesso. |
+
+        | id | Int | ID único identificador da portabilidade |
+      operationId: solicitarPortabilidade
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                doador_id_operadora:
+                  type: number
+                  example: 999
+                doador_numero:
+                  type: string
+                  example: '11999999999'
+                numero_contel:
+                  type: string
+                  example: '11999999999'
+            example:
+              doador_id_operadora: 999
+              doador_numero: '11999999999'
+              numero_contel: '11999999999'
+      responses:
+        '200':
+          description: Solicitar Portabilidade
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mensagem:
+                    type: string
+                    example: Chip não encontrado.
+                  portabilidade:
+                    type: array
+                    items: {}
+                    example: []
+                  retorno:
+                    type: boolean
+                    example: false
+              examples:
+                Solicitar Portabilidade:
+                  value:
+                    mensagem: Chip não encontrado.
+                    portabilidade: []
+                    retorno: false
+  /portabilidade/status:
+    get:
+      tags:
+        - Portabilidade
+      summary: Consultar Status
+      description: >-
+        Consulta o último status de uma portabilidade.
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | linha | String | Número da linha Contel, com 11 dígitos (DDD + número)
+        | \* |
+
+        | linha_doadora | String | Número da linha doadora (linha que está na
+        outra operadora) com 11 dígitos (DDD + número) | \* |
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | retorno | Booleano | Retorno de sucesso do endpoint |
+
+        | mensagem | String | Mensagem de retorno da api, como descrição do erro
+        por exemplo |
+
+        | status | String | Último status da portabilidade. Status possíveis:
+        Sucesso, Aguardando confirmação, Portabilidade em andamento,
+        Portabilidade negada. |
+
+        | data_aceite | String | Data e hora em que o cliente aceitou a
+        solicitação de portabilidade |
+
+        | data_sucesso | String | Data em que a portabilidade ocorreu com
+        sucesso |
+
+        | data_agendamento | String | Data para a qual a portabilidade foi
+        agendada |
+
+        | termo | String | Link do termo para assinatura, caso o cliente não
+        consiga fazer aceite pelo SMS |
+
+        | termo_assinado | String | Link do termo assinado pelo cliente |
+
+
+        Sobre o termo: o aceite padrão da portabilidade acontece através de um
+        link enviado por SMS para a linha doadora.
+
+
+        Mas, caso o cliente não consiga realizar o aceite dessa forma, poderá
+        assinar o termo e autenticar em cartório (ou assinar via gov.br) e
+        enviar à Contel, junto a um documento com foto.
+      operationId: consultarStatus
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                linha:
+                  type: string
+                  example: '51999999999'
+                linha_doadora:
+                  type: string
+                  example: '51999999999'
+            example:
+              linha: '51999999999'
+              linha_doadora: '51999999999'
+      responses:
+        '200':
+          description: Consultar Status
+          content:
+            text/plain:
+              examples:
+                Consultar Status:
+                  value: "{\r\n\t\"retorno\": true,\r\n\t\"mensagem\": \"\",\r\n\t\"status\": {\r\n\t\t\"status\": \"Sucesso\",\r\n\t\t\"data_aceite\": \"2022-06-02 15:49:08.520\",\r\n\t\t\"data_sucesso\": \"2022-06-08\",\r\n\t\t\"data_agendamento\": \"2022-06-07 22:00:00.000\",\r\n        \"termo\" \"link_do_termo\",\r\n        \"termo_assinado\" \"link_do_termo_assinado_pelo_cliente\"\r\n\t}\r\n}"
+  /portabilidade/operadorasDisponiveis:
+    get:
+      tags:
+        - Portabilidade
+      summary: Operadoras Disponíveis
+      description: >-
+        Listagem de operadoras disponíveis para solicitação de portabilidade.
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | retorno | Booleano | Retorno de sucesso do endpoint |
+
+        | mensagem | String | Mensagem de retorno da api, como descrição do erro
+        por exemplo |
+
+        | id | Int | ID da operadora |
+
+        | descricao | String | Nome da operadora |
+      operationId: operadorasDisponVeis
+      responses:
+        '200':
+          description: Operadoras Disponíveis
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        descricao:
+                          type: string
+                          example: CLARO
+                        id:
+                          type: number
+                          example: 41
+                    example:
+                      - descricao: CLARO
+                        id: 41
+                      - descricao: NEXTEL
+                        id: 47
+                      - descricao: OI
+                        id: 48
+                      - descricao: SURF TELECOM
+                        id: 51
+                      - descricao: TIM
+                        id: 52
+                      - descricao: VIVO
+                        id: 54
+                  mensagem:
+                    type: string
+                    example: ''
+                  retorno:
+                    type: boolean
+                    example: true
+              examples:
+                Operadoras Disponíveis:
+                  value:
+                    data:
+                      - descricao: CLARO
+                        id: 41
+                      - descricao: NEXTEL
+                        id: 47
+                      - descricao: OI
+                        id: 48
+                      - descricao: SURF TELECOM
+                        id: 51
+                      - descricao: TIM
+                        id: 52
+                      - descricao: VIVO
+                        id: 54
+                    mensagem: ''
+                    retorno: true
+  /portabilidade/reenviarsms:
+    post:
+      tags:
+        - Portabilidade
+      summary: Reenviar SMS
+      description: >-
+        Reenvio de SMS de aceite / confirmação de portabilidade.
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | linha | String | Número da linha Contel, com 11 dígitos (DDD + número)
+        | * |
+
+        | linha_doadora | String | Número da linha doadora (linha que está na
+        outra operadora) com 11 dígitos (DDD + número) | * |
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | retorno | Booleano | Retorno de sucesso do endpoint |
+
+        | mensagem | String | Mensagem de retorno da api, com informação sobre o
+        status do reenvio |
+      operationId: reenviarSms
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                doador_numero:
+                  type: string
+                  example: '51999999999'
+                numero_contel:
+                  type: string
+                  example: '51999999999'
+            example:
+              doador_numero: '51999999999'
+              numero_contel: '51999999999'
+      responses:
+        '200':
+          description: ''
+  /compra/solicitar:
+    post:
+      tags:
+        - Compra
+      summary: Cadastrar Compra
+      description: >-
+        Cadastro de nova compra, através de entrega de chip via logística.
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | metodo_pagamento | String | É a forma de pagamento da compra. Padrão:
+        "LINK" para gerar um link de pagamento ou "SALDO" para descontar do
+        saldo em carteira. | \* |
+
+        | id_plano | Int | ID do plano, oriundo do GET de [Listar
+        Planos](https://docs.conteltelecom.com.br/#12f51f4e-0685-45d0-a2c7-ce7f3cfdf167).
+        Este é o plano que o cliente irá ativar após receber o chip. | \* |
+
+        | quantidade | Int | Quantidade de chips que o cliente está comprando. O
+        padrão é 1. Mas, podem ser comprados até 15 chips no mesmo pedido. |  |
+
+        | nome | String | Nome completo do cliente | \* |
+
+        | cpf | String | CPF do cliente. Enviar este campo apenas se o cliente
+        for PF. | \* |
+
+        | cnpj | String | CNPJ do cliente. Enviar este campo apenas se o cliente
+        for PJ. |  |
+
+        | email | String | E-mail de contato do cliente |  |
+
+        | telefone | String | Telefone alternativo de contato do cliente |  |
+
+        | data_nascimento | String | Data de nascimento. Enviar apenas se
+        cliente PF. Formato: YYYY-MM-DD |  |
+
+        | link_indicacao | String | Link de venda direta do PDV. Utilizar /
+        enviar apenas se estiver criando e utilizando o link de venda direta. | 
+        |
+
+        | endereco.rua | String | Nome da rua do cliente, onde será entregue o
+        chip. Tamanho máximo: 80 caracteres. | \* |
+
+        | endereco.numero | String | Número da casa / apto / sala. Tamanho
+        máximo: 10 caracteres | \* |
+
+        | endereco.complemento | String | Complemento ou ponto de referência.
+        Tamanho máximo: 60 caracteres. |  |
+
+        | endereco.bairro | String | Bairro. Tamanho máximo: 40 caracteres. | \*
+        |
+
+        | endereco.cep | String | CEP | \* |
+
+        | endereco.id_cidade | Int | id da cidade, oriunda do endpoint de
+        [Listar
+        cidades](https://docs.conteltelecom.com.br/#8e214d5b-34be-4608-98c4-7d1238e40cb4).
+        | \* |
+
+        | sistema_origem | String | Campo livre para você salvar o nome do
+        sistema onde está integrando a api. Assim, facilitamos o suporte. |  |
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | retorno | Booleano | Retorno de sucesso do endpoint |
+
+        | mensagem | String | Mensagem de retorno da api, como descrição de erro
+        por exemplo |
+
+        | id | Int | Código identificador único da compra |
+
+        | link_pagamento | String | Link para pagamento da compra de chip, que
+        deve ser enviado ao cliente. O cliente também recebe o link por SMS.
+        Retornado apenas quando a forma de pagamento escolhida é LINK |
+
+        | boleto_link | String | Link do PDF do boleto. Retornado apenas quando
+        a forma de pagamento escolhida é BOLETO |
+
+        | boleto_codigo_barras | String | Código de barras do boleto. Retornado
+        apenas quando a forma de pagamento escolhida é BOLETO |
+
+        | pix_QRCode | String | Imagem QR Code do pix. Retornado apenas quando a
+        forma de pagamento escolhida é PIX |
+
+        | pix_copia_cola | String | Código copia e cola do pix. Retornado apenas
+        quando a forma de pagamento escolhida é PIX |
+
+        | cartao_de_credito | String | Retorno de sucesso quando a forma de
+        pagamento escolhida é CARTÃO DE CRÉDITO |
+
+
+        Observações:
+
+
+        - **QUANTIDADE**: O cliente pode comprar, no mesmo pedido, mais de um
+        chip. Assim, receberá no endereço cadastrado um envelope contendo a
+        quantidade escolhida de chips. Ao finalizar a compra, o pagamento é
+        gerado no valor total da soma de chips escolhidos. Para isso, utilize o
+        campo "quantidade". Se o campo não for enviado na requisição, o valor
+        padrão será 1.
+        
+        
+        _Atualmente a quantidade máxima é de 15._
+
+
+        - Método de pagamento SALDO: é a forma mais indicada quando se deseja
+        utilizar o saldo em carteira na Contel para realizar os pgtos. Dessa
+        forma, o cliente pode ser cobrado em dinheiro ou utilizando outro
+        sistema / meio de pgto. Ao utilizar "SALDO", a sua margem já fica retida
+        e só é descontada a margem da Contel.
+
+        - Utilize o id_plano como 88888 quando for uma compra de APENAS CHIP.
+      operationId: cadastrarCompra
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cpf:
+                  type: string
+                  example: '00000000000'
+                data_nascimento:
+                  type: string
+                  example: '1950-01-01'
+                email:
+                  type: string
+                  example: cliente@email.com
+                endereco:
+                  type: object
+                  properties:
+                    bairro:
+                      type: string
+                      example: Bairro
+                    cep:
+                      type: string
+                      example: '00000000'
+                    complemento:
+                      type: string
+                      example: Complemento
+                    id_cidade:
+                      type: number
+                      example: 99999
+                    numero:
+                      type: string
+                      example: '123'
+                    rua:
+                      type: string
+                      example: Rua Exemplo
+                id_plano:
+                  type: number
+                  example: 88888
+                link_indicacao:
+                  type: string
+                  example: linkVendaDireta
+                metodo_pagamento:
+                  type: string
+                  example: LINK
+                nome:
+                  type: string
+                  example: Nome do Cliente
+                quantidade:
+                  type: number
+                  example: 1
+                telefone:
+                  type: string
+                  example: '51999999999'
+            example:
+              cpf: '00000000000'
+              data_nascimento: '1950-01-01'
+              email: cliente@email.com
+              endereco:
+                bairro: Bairro
+                cep: '00000000'
+                complemento: Complemento
+                id_cidade: 99999
+                numero: '123'
+                rua: Rua Exemplo
+              id_plano: 88888
+              link_indicacao: linkVendaDireta
+              metodo_pagamento: LINK
+              nome: Nome do Cliente
+              quantidade: 1
+              telefone: '51999999999'
+      responses:
+        '200':
+          description: Cadastrar Compra
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  link:
+                    type: string
+                    example: ''
+                  mensagem:
+                    type: string
+                    example: Plano não encontrado.
+                  retorno:
+                    type: boolean
+                    example: true
+              examples:
+                Cadastrar Compra:
+                  value:
+                    link: ''
+                    mensagem: Plano não encontrado.
+                    retorno: true
+  /compra/rastrear:
+    post:
+      tags:
+        - Compra
+      summary: Rastreio
+      description: |-
+        Rastreio de chip enviado via logística por transportadora.
+
+        Estrutura do conteúdo de envio:
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+        | --- | --- | --- | --- |
+        | id | Int | Código / ID do pedido | \* |
+
+        Estrutura do conteúdo de resposta:
+
+        | **Atributo** | **Tipo** | **Descrição** |
+        | --- | --- | --- |
+        | retorno | Boolean | Retorno de sucesso do endpoint |
+        | mensagem | String | Mensagem de retorno de sucesso da api |
+        | pedido | String | ID do pedido, enviado na requisição |
+        | data_pedido | String | Data e hora em que a compra foi gerada |
+        | cliente | String | Nome do cliente |
+        | rastreio.data | String | Data do status do rastreio |
+        | rastreio.status | String | Descrição do status do rastreio |
+      operationId: rastreio
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: number
+                  example: 12345
+            example:
+              id: 12345
+      responses:
+        '200':
+          description: ''
+  /atendimento/bloqueio:
+    post:
+      tags:
+        - Atendimento
+      summary: Bloqueio
+      description: >-
+        Realização de bloqueio de linha.
+
+
+        No bloqueio a linha é bloqueada para consumo de dados, ligações e envio
+        de SMS.
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | numero | String | Número da linha a ser bloqueada. Apenas números. |
+        \* |
+
+        | observacoes | String | Campo livre de comentário ou observação para
+        identificar o bloqueio no sistema. |  |
+
+        | motivo | String | Motivo do bloqueio. Deve ser um dos motivos
+        possíveis. | \* |
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | status | String | Retorno de sucesso do endpoint |
+
+        | mensagem | String | Mensagem de retorno da api, como descrição de erro
+        ou sucesso da solicitação |
+
+        | data | String | Data e hora de realização do bloqueio |
+
+
+        Os possíveis **MOTIVOS** de solicitação de bloqueio de linha são:
+
+
+        - PERDA
+
+        - ROUBO
+
+        - TROCA
+
+        - BLOQUEIO DE IMEI
+
+        - INADIMPLÊNCIA
+        
+        
+        Você deve enviar um dos motivos acima na requisição.
+
+
+        Ao realizar o bloqueio na api, a linha é bloqueada imediatamente. Ou
+        seja, o processo é todo automático e integrado.
+      operationId: bloqueio
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                motivo:
+                  type: string
+                  example: ROUBO
+                numero:
+                  type: string
+                  example: '51900000000'
+                observacoes:
+                  type: string
+                  example: Observação sobre o bloqueio
+            example:
+              motivo: ROUBO
+              numero: '51900000000'
+              observacoes: Observação sobre o bloqueio
+      responses:
+        '200':
+          description: ''
+  /atendimento/desbloqueio:
+    post:
+      tags:
+        - Atendimento
+      summary: Desbloqueio
+      description: >-
+        StartFragment
+
+
+        Realização de desbloqueio de linha.
+
+
+        No desbloqueio a linha, com status de bloqueada, é desbloqueada. Assim,
+        volta a ser possível realização de ligações, consumo de dados e envio de
+        sms pela linha (caso a mesma tenha saldo).
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | numero | String | Número da linha a ser desbloqueada. Apenas números.
+        | \* |
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | status | Boolean | Retorno de sucesso do endpoint |
+
+        | mensagem | String | Mensagem de retorno da api, como descrição de erro
+        ou sucesso da solicitação |
+
+        | data | String | Data e hora de realização do desbloqueio |
+
+
+        Ao realizar o desbloqueio, a linha volta a funcionar imediatamente. Ou
+        seja, o processo é todo automático e integrado.
+      operationId: desbloqueio
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                numero:
+                  type: string
+                  example: '51900000000'
+            example:
+              numero: '51900000000'
+      responses:
+        '200':
+          description: ''
+  /portabilidade/listar:
+    get:
+      tags:
+        - Relatórios
+      summary: Portabilidades
+      description: >-
+        Neste relatório você consegue listar todas as portabilidades.
+
+
+        Estrutura do conteúdo de envio:
+
+
+        _Todos os campos são de envio opcional. São filtros para facilitar a
+        busca._
+
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | status | String | Filtro por um dos possíveis status de portabilidade:
+        Aguardando confirmação, Portabilidade em andamento, Sucesso,
+        Portabilidade negada |  |
+
+        | operadora_doadora | String | Filtro pelo nome da operadora doadora:
+        CLARO, VIVO, TIM, OI, ... |  |
+
+        | linha | String | Filtro pelo número da linha Contel / marca |  |
+
+        | linha_doadora | String | Filtro pelo número da operadora doadora |  |
+
+        | data_cadastro_inicio | String | Filtro de data inicial de cadastro da
+        portabilidade |  |
+
+        | data_cadastro_fim | String | Filtro de data final de cadastro da
+        portabilidade |  |
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | retorno | Boolean | Retorno de sucesso do endpoint |
+
+        | mensagem | String | Mensagem de retorno da api, como descrição de erro
+        ou sucesso da solicitação |
+
+        | data_cadastro | String | Data e hora de cadastro da portabilidade |
+
+        | cliente | String | Nome do cliente |
+
+        | cliente_cpf | String | Documento do cliente, caso PF |
+
+        | cliente_cnpj | String | Número do CNPJ, caso PJ |
+
+        | linha | String | Número da linha Contel |
+
+        | linha_doadora | String | Número da linha a ser portada, na operadora
+        doadora |
+
+        | operadora_doadora | String | Nome da operadora doadora |
+
+        | status | String | Status atual da portabilidade |
+
+        | data_aceite | String | Data e hora em que o cliente aceitou a
+        portabilidade. |
+
+        | data_agendamento | String | Data de agendamento da portabilidade.
+        Nessa data e horário, a portabilidade deve acontecer. |
+
+        | data_sucesso | String | Data em que a portabilidade aconteceu com
+        sucesso (caso já tenha sido realizada). |
+
+
+        Os possíveis **STATUS** de portabilidade são:
+
+
+        **Aguardando confirmação:** cliente solicitou a portabilidade mas ainda
+        não foi realizado o aceite.
+
+
+        **Portabilidade em andamento:** portabilidade já aceita, em andamento.
+        Após ser aceita a portabilidade leva 3 dias úteis para ocorrer.
+
+
+        **Sucesso:** portabilidade realizada com sucesso.
+
+
+        **Portabilidade negada:** por alguma divergência, a portabilidade foi
+        negada e não ocorreu.
+      operationId: portabilidades
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data_cadastro_fim:
+                  type: string
+                  example: 31/12/2022
+                data_cadastro_inicio:
+                  type: string
+                  example: 01/01/2022
+                linha:
+                  type: string
+                  example: ''
+                linha_doadora:
+                  type: string
+                  example: ''
+                operadora_doadora:
+                  type: string
+                  example: ''
+                status:
+                  type: string
+                  example: '0'
+            example:
+              data_cadastro_fim: 31/12/2022
+              data_cadastro_inicio: 01/01/2022
+              linha: ''
+              linha_doadora: ''
+              operadora_doadora: ''
+              status: '0'
+      responses:
+        '200':
+          description: ''
+  /relatorios/ativacoes:
+    get:
+      tags:
+        - Relatórios
+      summary: Ativações
+      description: >-
+        Neste relatório você consegue listar todas as ativações.
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | data_de | String | Data inicial do filtro | \* |
+
+        | data_ate | String | Data final do filtro | \* |
+
+        | page | Int | Número da página | \* |
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | id | String | ID identificador da ativação. |
+
+        | cliente_nome | String | Nome do cliente |
+
+        | cliente_apelido | String | Apelido ou nome social do cliente |
+
+        | documento | String | Número do documento do titular |
+
+        | iccid | String | ICCID da ativação |
+
+        | linha | String | Número da linha |
+
+        | data_ativacao | String | Data e hora da ativação |
+
+        | plano_ativacao | String | Nome do plano ativado |
+
+        | plano_inicio | String | Data de início do plano |
+
+        | plano_fim | String | Data de fim de plano |
+
+        | plano_valor | String | Valor do plano ativado |
+
+        | tipo_linha | String | Tipo de linha: PRÉ PAGO ou CONTROLE INTELIGENTE
+        |
+
+        | forma_pagto | String | Forma de pagamento da ativação |
+      operationId: ativaEs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data_ate:
+                  type: string
+                  example: '2023-02-10'
+                data_de:
+                  type: string
+                  example: '2023-01-10'
+                page:
+                  type: number
+                  example: 1
+            example:
+              data_ate: '2023-02-10'
+              data_de: '2023-01-10'
+              page: 1
+      responses:
+        '200':
+          description: ''
+  /relatorios/recargas:
+    get:
+      tags:
+        - Relatórios
+      summary: Recargas
+      description: >-
+        Neste relatório você consegue listar todas as recargas.
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | data_de | String | Data inicial do filtro | \* |
+
+        | data_ate | String | Data final do filtro | \* |
+
+        | page | Int | Número da página | \* |
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | id | String | ID identificador da recarga |
+
+        | cliente_nome | String | Nome do cliente |
+
+        | cliente_apelido | String | Apelido ou nome social do cliente |
+
+        | documento | String | Número do documento do titular |
+
+        | linha | String | Número da linha |
+
+        | iccid | String | ICCID da linha |
+
+        | data_ativacao | String | Data e hora da recarga |
+
+        | plano_ativacao | String | Nome do plano |
+
+        | plano_inicio | String | Data de início do plano |
+
+        | plano_fim | String | Data de fim de plano |
+
+        | plano_valor | String | Valor do plano da recarga |
+
+        | tipo_linha | String | Tipo de linha: PRÉ PAGO ou CONTROLE INTELIGENTE
+        |
+
+        | forma_pagto | String | Forma de pagamento da recarga |
+      operationId: recargas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data_ate:
+                  type: string
+                  example: '2023-02-10'
+                data_de:
+                  type: string
+                  example: '2023-01-10'
+                page:
+                  type: number
+                  example: 1
+            example:
+              data_ate: '2023-02-10'
+              data_de: '2023-01-10'
+              page: 1
+      responses:
+        '200':
+          description: ''
+  /relatorios/transacoes:
+    get:
+      tags:
+        - Relatórios
+      summary: Transações
+      description: "Neste relatório você consegue listar todas as recargas E ativações.\n\nEstrutura do conteúdo de envio:\n\n| **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |\n| --- | --- | --- | --- |\n| data_de | String | Data inicial do filtro | \\* |\n| data_ate | String | Data final do filtro | \\* |\n| page | Int | Número da página | \\* |\n\nEstrutura do conteúdo de resposta:\n\n| **Atributo** | **Tipo** | **Descrição** |\n| --- | --- | --- |\n| id | String | ID identificador da transação |\n| cliente_nome | String | Nome do cliente |\n| cliente_apelido | String | Apelido ou nome social do cliente |\n| documento | String | Número do documento do titular |\n| tipo_pessoa | String | PF = pessoa física, PJ = pessoa jurídica |\n| linha | String | Número da linha |\n| iccid | String | ICCID da linha |\n| data_ativacao | String | Data e hora da ativação da linha |\n| plano_atual | String | Nome do plano atual da linha |\n| plano_inicio | String | Data de início do plano |\n| plano_fim | String | Data de fim de plano |\n| plano_valor | String | Valor do plano |\n| tipo_linha | String | Tipo de linha: PRÉ PAGO ou CONTROLE INTELIGENTE |\n| forma_pagto | String | Forma de pagamento da \x7Frecarga ou ativação |\n| tipo_transacao | String | Identifica o tipo de transação: RECARGA ou ATIVAÇÃO. |"
+      operationId: transaEs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data_ate:
+                  type: string
+                  example: '2023-02-10'
+                data_de:
+                  type: string
+                  example: '2023-01-10'
+                page:
+                  type: number
+                  example: 1
+            example:
+              data_ate: '2023-02-10'
+              data_de: '2023-01-10'
+              page: 1
+      responses:
+        '200':
+          description: ''
+  /faq/categorias:
+    get:
+      tags:
+        - FAQ
+      summary: Categorias
+      description: >-
+        Categorias do FAQ da Contel.
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | id | Int | ID que identifica a categoria. É utilizado para listar as
+        perguntas e respostas de cada categoria. |
+
+        | descricao | String | Nome da categoria |
+      operationId: categorias
+      responses:
+        '200':
+          description: Categorias
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    descricao:
+                      type: string
+                      example: Atendimento
+                    id:
+                      type: number
+                      example: 6
+                example:
+                  - descricao: Atendimento
+                    id: 6
+                  - descricao: Portabilidade
+                    id: 7
+              examples:
+                Categorias:
+                  value:
+                    - descricao: Atendimento
+                      id: 6
+                    - descricao: Portabilidade
+                      id: 7
+  /faq/categoria/X:
+    get:
+      tags:
+        - FAQ
+      summary: Perguntas e Respostas
+      description: >-
+        Lista de perguntas e respostas, para determinada categoria, do FAQ da
+        Contel.
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | id | Int | ID que identifica o item |
+
+        | pergunta | String | Pergunta |
+
+        | resposta | String | Resposta |
+      operationId: perguntasERespostas
+      responses:
+        '200':
+          description: Perguntas e Respostas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: '1'
+                    pergunta:
+                      type: string
+                      example: ''
+                    resposta:
+                      type: string
+                      example: ''
+                example:
+                  - id: '1'
+                    pergunta: ''
+                    resposta: ''
+                  - id: '2'
+                    pergunta: ''
+                    resposta: ''
+              examples:
+                Perguntas e Respostas:
+                  value:
+                    - id: '1'
+                      pergunta: ''
+                      resposta: ''
+                    - id: '2'
+                      pergunta: ''
+                      resposta: ''
+  /validar/cep:
+    post:
+      tags:
+        - Validações
+      summary: CEP
+      description: |-
+        Endpoint para validar um CEP.
+
+        Estrutura do conteúdo de envio:
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+        | --- | --- | --- | --- |
+        | cep | String | Número do CEP a ser validado. | \* |
+
+        Estrutura do conteúdo de resposta:
+
+        | **Atributo** | **Tipo** | **Descrição** |
+        | --- | --- | --- |
+        | valido | Boolean | Retorno de sucesso do endpoint |
+        | cidade | String | Nome da cidade |
+        | bairro | String | Nome do bairro |
+        | rua | String | Nome da rua, caso o CEP seja de uma rua específica |
+        | numero | String | Número, caso o CEP seja de um endereço específico |
+        | uf | String | Estado |
+      operationId: cep
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cep:
+                  type: string
+                  example: '96815900'
+            example:
+              cep: '96815900'
+      responses:
+        '200':
+          description: ''
+  /validar/cpf:
+    post:
+      tags:
+        - Validações
+      summary: CPF
+      description: |-
+        Endpoint para validar um CPF.
+
+        Estrutura do conteúdo de envio:
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+        | --- | --- | --- | --- |
+        | cpf | String | Número do CPF a ser validado. | \* |
+
+        Estrutura do conteúdo de resposta:
+
+        | **Atributo** | **Tipo** | **Descrição** |
+        | --- | --- | --- |
+        | valido | Boolean | Retorno de sucesso do endpoint |
+        | cpf | String | CPF |
+        | titular | String | Nome do titular |
+        | nascimento | String | Data de nascimento do titular |
+        | idade | Int | Idade do titular |
+      operationId: cpf
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cpf:
+                  type: string
+                  example: '00000000000'
+            example:
+              cpf: '00000000000'
+      responses:
+        '200':
+          description: ''
+  /validar/cnpj:
+    post:
+      tags:
+        - Validações
+      summary: CNPJ
+      description: |-
+        Endpoint para validar um CNPJ.
+
+        Estrutura do conteúdo de envio:
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+        | --- | --- | --- | --- |
+        | cnpj | String | Número do CNPJ a ser validado. | \* |
+
+        Estrutura do conteúdo de resposta:
+
+        | **Atributo** | **Tipo** | **Descrição** |
+        | --- | --- | --- |
+        | valido | Boolean | Retorno de sucesso do endpoint |
+        | cnpj | String | CNPJ |
+        | razao_social | String | Razão social |
+        | nome_fantasia | String | Nome fantasia |
+      operationId: cnpj
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cnpj:
+                  type: string
+                  example: '00000000000000'
+            example:
+              cnpj: '00000000000000'
+      responses:
+        '200':
+          description: ''
+  /pagamento:
+    post:
+      tags:
+        - Pagamento
+      summary: Pagamento
+      description: >-
+        Todas as solicitações de ativação e recarga geram um ID. Aqui, neste
+        endpoint, podemos buscar todas as informações referentes a essa ativação
+        / recarga para enviar ao cliente ou montar uma página de pagamento.
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | tipo | String | O tipo pode ser: A = ativação, R = recarga, C =
+        compra. | \* |
+
+        | id | String | ID da ativação, recarga ou compra | \* |
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | status | Boolean | Retorno de sucesso do endpoint |
+
+        | link_pagamento | String | Link de pagamento gerado. Quando a forma de
+        pagamento for LINK |
+
+        | boleto_link | String | Link do PDF do boleto, quando a forma de
+        pagamento for BOLETO |
+
+        | boleto_codigo_barras | String | Código de barras do boleto, quando a
+        forma de pagamento for BOLETO |
+
+        | pix_QRCode | String | QR Code do PIX, quando a forma de pagamento for
+        PIX |
+
+        | pix_copia_cola | String | Código copia e cola, quando a forma de
+        pagamento for PIX |
+
+        | data_cadastro | String | Data de cadastro da solicitação de
+        recarga/ativação/compra |
+
+        | id | String | Id enviado na requisição |
+
+        | iccid | String | Iccid di chip, quando se tratar de uma ativação |
+
+        | linha | String | Número da linha, quando se tratar de uma recarga |
+
+        | valor | String | Valor total do pagamento |
+
+        | nome | String | Nome do cliente |
+
+        | cor | String | A cor retornada aqui é a cor principal padrão de cada
+        marca, para uma evetual criação de página personalizada de pagamento |
+
+        | logo | String | Retornado link do logotipo da marca a qual a linha /
+        chip pertence, para uma evetual criação de página personalizada de
+        pagamento |
+
+        | operadora | String | Nome da operadora |
+
+        | suporte | String | Link do suporte da marca |
+      operationId: pagamento
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: '12345'
+                tipo:
+                  type: string
+                  example: R
+            example:
+              id: '12345'
+              tipo: R
+      responses:
+        '200':
+          description: ''
+  /saldo/saldo:
+    get:
+      tags:
+        - Saldo
+      summary: Consulta de saldo
+      description: >-
+        Uma das formas de pagamento disponibilizadas é a opção de **SALDO**.
+
+
+        Nela, a franquia / marca antecipa um saldo na Contel e pode consumir
+        deste saldo para recargas, ativações e vendas.
+
+
+        Aqui, neste endpoint, é realizada a consulta do saldo disponível.
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | saldo | String | Saldo disponível |
+      operationId: consultaDeSaldo
+      responses:
+        '200':
+          description: ''
+  /saldo/extrato:
+    get:
+      tags:
+        - Saldo
+      summary: Extrato
+      description: >-
+        Consulta do histórico de envios de SMS de uma linha.
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | data_inicio | String | Filtro de data de início | \* |
+
+        | data_fim | String | Filtro de data final | \* |
+
+        | tipo | String | Tipo de movimentação a ser filtrada: "S" = Saídas
+        (recargas, ativações, compras), "E" = Entradas (adição de saldo) | \* |
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | retorno | Booleano | Retorno de sucesso do endpoint |
+
+        | mensagem | String | Mensagem de retorno da api |
+
+        | tipo | String | Tipo de movimentação: ENTRADA ou SAÍDA |
+
+        | data | String | Data do registro |
+
+        | valor | String | Valor cobrado da franquia / marca. Este é o valor
+        líquido cobrado, não o valor pago pelo cliente |
+
+        | descricao_cliente | String | Nome do cliente |
+
+        | linha | String | Número da linha (caso recarga) |
+
+        | iccid | String | Iccid do chip (caso ativação) |
+
+        | plano_nome | String | Nome do plano |
+
+        | plano_valor | String | Valor do plano |
+      operationId: extrato
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data_fim:
+                  type: string
+                  example: '2023-05-31'
+                data_inicio:
+                  type: string
+                  example: '2023-05-01'
+                tipo:
+                  type: string
+                  example: S
+            example:
+              data_fim: '2023-05-31'
+              data_inicio: '2023-05-01'
+              tipo: S
+      responses:
+        '200':
+          description: ''
+  /saldo/programado:
+    get:
+      tags:
+        - Saldo
+      summary: Recargas Programadas
+      description: >-
+        Retorna
+
+
+        Estrutura do conteúdo de envio:
+
+
+        | **Atributo** | **Tipo** | **Descrição** | **Obrigatório** |
+
+        | --- | --- | --- | --- |
+
+        | data_renovacao_de | String | Filtro de data inicial da data de
+        renovação de recarga. Enviar no formato dd/mm/yyyy | \* |
+
+        | data_renovacao_ate | String | Filtro de data final da data de
+        renovação de recarga. Enviar no formato dd/mm/yyyy | \* |
+
+
+        Estrutura do conteúdo de resposta:
+
+
+        | **Atributo** | **Tipo** | **Descrição** |
+
+        | --- | --- | --- |
+
+        | cliente_nome | String | Nome do cliente |
+
+        | cliente_documento | String | Documento do cliente |
+
+        | linha | String | Número da linha na recarga programada |
+
+        | linha_apelido | String | Apelido associado ao número da linha |
+
+        | data_cadastro | String | Data de cadastro da linha na recarga
+        programada |
+
+        | pessoa_cadastro | String | Nome do usuário que cadastrou a recarga |
+
+        | pessoa_cadastro_login | String | Login da pessoa que cadastrou |
+
+        | plano | String | Nome do plano |
+
+        | plano_valor | String | Valor do plano |
+
+        | data_renovacao | String | Data programada para a renovação,
+        automática, do plano |
+      operationId: recargasProgramadas
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data_renovacao_ate:
+                  type: string
+                  example: 30/06/2023
+                data_renovacao_de:
+                  type: string
+                  example: 01/06/2023
+            example:
+              data_renovacao_ate: 30/06/2023
+              data_renovacao_de: 01/06/2023
+      responses:
+        '200':
+          description: ''
+tags:
+  - name: Token
+    description: >-
+      Para consumir a API é necessário obter um token de acesso temporário
+      (Bearer). Esse token possui um tempo de validade e, sempre que expirado, o
+      passo de requisição de um novo token de acesso deve ser repetido.
+  - name: Geral
+    description: Aqui você tem acesso a endpoints gerais de listagem.
+  - name: Cliente
+    description: Cadastre e gerencie seus clientes.
+  - name: Linha
+    description: >-
+      Todas as consultas que envolvem o número da linha de algum cliente estão
+      aqui.
+  - name: Histórico de consumo
+    description: 'Consulta, por linha, do histórico de consumo: dados, voz e sms.'
+  - name: Ativação
+    description: >-
+      Endpoints relacionados a ativação de um chip virgem além de consultas e
+      validações de ICCIDs.
+  - name: Recarga
+    description: >-
+      Utilize a opção de recarga para solicitar a renovação do plano de um
+      cliente.
+  - name: Portabilidade
+    description: >-
+      Tudo relacionado à portabilidade, onde o cliente traz sua linha de outra
+      operadora para a Contel, está aqui.
+  - name: Compra
+    description: >-
+      A compra de chip é o processo onde o cliente, após pagamento, recebe o
+      chip na sua casa através da nossa logística.
+  - name: Atendimento
+  - name: Relatórios
+  - name: FAQ
+    description: Este é o FAQ da Contel.
+  - name: Validações
+  - name: Pagamento
+  - name: Saldo

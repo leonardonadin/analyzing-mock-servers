@@ -1,0 +1,18 @@
+{
+    "name": "ixcsoft/wiremock",
+    "autoload": {
+        "psr-4": {
+            "Ixcsoft\\Wiremock\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Leonardo Nadin",
+            "email": "leonardo.nadin@ixcsoft.com.br"
+        }
+    ],
+    "require-dev": {
+        "wiremock-php/wiremock-php": "2.35.0",
+        "phpunit/phpunit": "^9.6"
+    }
+}

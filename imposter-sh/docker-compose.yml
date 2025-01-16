@@ -1,0 +1,7 @@
+services:
+  imposter:
+    image: outofcoffee/imposter-all
+    volumes:
+      - ./config:/opt/imposter/config
+    ports:
+      - 8080:8080

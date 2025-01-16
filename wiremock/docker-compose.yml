@@ -1,0 +1,8 @@
+services:
+  wiremock:
+    container_name: wiremock
+    image: wiremock/wiremock:latest
+    ports:
+      - 8091:8080
+    volumes:
+      - ./docker/wiremock:/home/wiremock

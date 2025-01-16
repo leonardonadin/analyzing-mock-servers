@@ -1,0 +1,14 @@
+{
+  "mappings": [
+    {
+      "request": {
+        "url": "/api-2",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "bodyFileName": "api-2/home-response.json"
+      }
+    }
+  ]
+}
